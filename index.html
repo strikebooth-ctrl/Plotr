@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plotr — Análisis técnico de terrenos para desarrollos inmobiliarios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+:root{
+  --navy:#0B1F3A;
+  --navy-deep:#071428;
+  --navy-mid:#122a4e;
+  --navy-light:#1a3a62;
+  --accent:#2563b8;
+  --accent-light:#3b7de8;
+  --white:#ffffff;
+  --off:#f7f8fa;
+  --cream:#f0f2f5;
+  --border:#dde2ea;
+  --text:#0B1F3A;
+  --text-mid:#3a4f6b;
+  --text-light:#6b7e96;
+  --text-xlight:#9aaabb;
+  --ff-d:'Playfair Display',Georgia,serif;
+  --ff-b:'DM Sans',system-ui,sans-serif;
+  --ff-m:'DM Mono',monospace;
+}
+body{font-family:var(--ff-b);background:var(--white);color:var(--text);overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--cream);}
+::-webkit-scrollbar-thumb{background:var(--navy-light);border-radius:3px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-mark{width:34px;height:34px;background:var(--navy);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-logo-text{font-family:var(--ff-d);font-size:18px;font-weight:600;color:var(--navy);letter-spacing:-0.3px;}
+.nav-logo-text span{color:var(--accent);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:13px;color:var(--text-mid);text-decoration:none;transition:color 0.15s;}
+.nav-links a:hover{color:var(--navy);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.btn-ghost{font-size:13px;color:var(--text-mid);background:none;border:1px solid var(--border);padding:8px 18px;border-radius:6px;cursor:pointer;font-family:var(--ff-b);transition:all 0.15s;}
+.btn-ghost:hover{border-color:var(--navy);color:var(--navy);}
+.btn-navy{font-size:13px;color:#fff;background:var(--navy);border:none;padding:9px 20px;border-radius:6px;cursor:pointer;font-family:var(--ff-b);font-weight:500;transition:background 0.15s;}
+.btn-navy:hover{background:var(--navy-mid);}
+
+/* HERO */
+.hero{background:var(--navy-deep);padding:90px 48px 0;position:relative;overflow:hidden;min-height:620px;}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:60px 60px;}
+.hero-glow{position:absolute;top:-100px;right:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(37,99,184,0.18) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:flex-start;}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:6px 14px;font-size:11px;color:rgba(255,255,255,0.5);font-family:var(--ff-m);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:26px;}
+.hero-pill-dot{width:6px;height:6px;border-radius:50%;background:#4a9eff;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+h1.hero-h{font-family:var(--ff-d);font-size:clamp(32px,4vw,50px);font-weight:600;line-height:1.1;color:#fff;letter-spacing:-0.02em;margin-bottom:18px;}
+h1.hero-h em{font-style:italic;color:rgba(255,255,255,0.4);}
+.hero-sub{font-size:15px;color:rgba(255,255,255,0.45);line-height:1.8;max-width:440px;margin-bottom:32px;font-weight:300;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-white{background:#fff;color:var(--navy);border:none;padding:12px 26px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--ff-b);transition:opacity 0.15s;}
+.btn-white:hover{opacity:0.88;}
+.btn-outline-w{background:transparent;color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.2);padding:12px 26px;border-radius:6px;font-size:14px;cursor:pointer;font-family:var(--ff-b);transition:all 0.15s;}
+.btn-outline-w:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.hero-trust{display:flex;align-items:center;gap:14px;margin-top:28px;flex-wrap:wrap;}
+.ht-line{width:1px;height:24px;background:rgba(255,255,255,0.1);}
+.ht-txt{font-size:10px;color:rgba(255,255,255,0.28);font-family:var(--ff-m);letter-spacing:0.06em;text-transform:uppercase;}
+
+/* HERO CANVAS CARD */
+.hero-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;margin-top:8px;}
+.hcard-head{background:rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.07);padding:11px 16px;display:flex;align-items:center;gap:8px;}
+.hch-dots{display:flex;gap:5px;}
+.hch-dot{width:8px;height:8px;border-radius:50%;}
+.hch-lbl{font-size:10px;color:rgba(255,255,255,0.25);font-family:var(--ff-m);letter-spacing:0.06em;margin-left:4px;}
+#hero-canvas{width:100%;height:240px;display:block;cursor:grab;}
+#hero-canvas:active{cursor:grabbing;}
+.hcard-foot{padding:12px 16px;border-top:1px solid rgba(255,255,255,0.07);display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.hcf{}.hcf-l{font-size:10px;color:rgba(255,255,255,0.25);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px;}
+.hcf-v{font-size:14px;font-weight:600;color:#fff;font-family:var(--ff-m);}
+.hcf-v.ok{color:#4fc98e;}.hcf-v.warn{color:#f0b429;}
+
+/* HERO STATS */
+.hero-stats{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);margin-top:60px;}
+.hs{text-align:center;padding:24px 16px;}
+.hs:not(:last-child){border-right:1px solid rgba(255,255,255,0.06);}
+.hs-n{font-family:var(--ff-d);font-size:34px;font-weight:600;color:#fff;letter-spacing:-1px;}
+.hs-l{font-size:10px;color:rgba(255,255,255,0.28);margin-top:5px;font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.07em;}
+
+/* SECTIONS */
+.sec{padding:80px 48px;}
+.sec-off{padding:80px 48px;background:var(--off);}
+.sec-navy{padding:80px 48px;background:var(--navy-deep);}
+.s-in{max-width:1100px;margin:0 auto;}
+.s-tag{font-size:10px;font-family:var(--ff-m);font-weight:500;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:10px;}
+.s-tag-w{font-size:10px;font-family:var(--ff-m);font-weight:500;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.28);margin-bottom:10px;}
+h2.sh{font-family:var(--ff-d);font-size:clamp(24px,3.2vw,38px);font-weight:600;color:var(--navy);line-height:1.15;letter-spacing:-0.02em;margin-bottom:12px;}
+h2.sh em{font-style:italic;color:var(--text-light);}
+h2.sh-w{font-family:var(--ff-d);font-size:clamp(24px,3.2vw,38px);font-weight:600;color:#fff;line-height:1.15;letter-spacing:-0.02em;margin-bottom:12px;}
+h2.sh-w em{font-style:italic;color:rgba(255,255,255,0.35);}
+.s-desc{font-size:15px;color:var(--text-light);line-height:1.8;max-width:520px;font-weight:300;margin-bottom:36px;}
+.s-desc-w{font-size:15px;color:rgba(255,255,255,0.4);line-height:1.8;max-width:520px;font-weight:300;margin-bottom:36px;}
+
+/* TIPOS */
+.tipos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+.tipo-card{background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:20px 16px;cursor:pointer;transition:all 0.18s;}
+.tipo-card:hover,.tipo-card.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,184,0.06);}
+.tipo-icon{font-size:22px;margin-bottom:10px;}
+.tipo-name{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+.tipo-desc{font-size:11px;color:var(--text-light);line-height:1.5;}
+
+/* TERRENOS */
+.t-controls{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center;}
+.t-inp{font-size:13px;padding:9px 14px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-family:var(--ff-b);flex:1;min-width:180px;outline:none;transition:border-color 0.15s;}
+.t-inp:focus{border-color:rgba(255,255,255,0.25);}
+.t-inp::placeholder{color:rgba(255,255,255,0.2);}
+.t-sel{font-size:13px;padding:9px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-family:var(--ff-b);cursor:pointer;outline:none;}
+.t-sel option{background:var(--navy-deep);color:#fff;}
+.t-sbtn{font-size:13px;padding:9px 20px;border-radius:6px;background:#fff;color:var(--navy);border:none;cursor:pointer;font-family:var(--ff-b);font-weight:600;}
+.terrenos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.tc{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color 0.18s;}
+.tc:hover{border-color:rgba(255,255,255,0.22);}
+.tc-map{height:120px;background:var(--navy-deep);position:relative;}
+.tc-map canvas{width:100%;height:100%;display:block;}
+.tc-badge{position:absolute;top:10px;left:10px;background:rgba(79,201,142,0.15);border:1px solid rgba(79,201,142,0.3);color:#4fc98e;font-size:10px;font-weight:600;padding:3px 10px;border-radius:3px;font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.05em;}
+.tc-body{padding:16px 18px;}
+.tc-addr{font-size:14px;font-weight:600;color:#fff;margin-bottom:2px;}
+.tc-barrio{font-size:11px;color:rgba(255,255,255,0.28);margin-bottom:14px;font-family:var(--ff-m);}
+.tc-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.tc-sp{background:rgba(255,255,255,0.04);border-radius:5px;padding:8px 10px;}
+.tsl{font-size:10px;color:rgba(255,255,255,0.25);margin-bottom:3px;font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.04em;}
+.tsv{font-size:13px;font-weight:600;color:#fff;font-family:var(--ff-m);}
+.tc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.tt{font-size:10px;padding:3px 8px;border-radius:3px;font-family:var(--ff-m);font-weight:500;}
+.tt.ok{background:rgba(79,201,142,0.1);color:#4fc98e;}
+.tt.warn{background:rgba(240,180,41,0.1);color:#f0b429;}
+.tt.neu{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.3);}
+.tc-foot{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
+.tc-own{font-size:11px;color:rgba(255,255,255,0.2);font-family:var(--ff-m);}
+.tc-btn{font-size:11px;font-weight:600;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);padding:6px 14px;border-radius:5px;cursor:pointer;font-family:var(--ff-b);transition:all 0.15s;}
+.tc-btn:hover{background:rgba(255,255,255,0.12);color:#fff;}
+
+/* COMO FUNCIONA */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:36px;}
+.how-step{background:#fff;padding:32px 26px;}
+.how-num{font-family:var(--ff-m);font-size:11px;font-weight:500;color:var(--text-xlight);letter-spacing:0.08em;margin-bottom:18px;text-transform:uppercase;}
+.how-num span{color:var(--accent);}
+.how-title{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:8px;line-height:1.3;}
+.how-body{font-size:13px;color:var(--text-light);line-height:1.7;font-weight:300;}
+
+/* FEATURES */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1px;background:rgba(11,31,58,0.08);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:36px;}
+.feat-card{background:#fff;padding:30px 26px;transition:background 0.15s;}
+.feat-card:hover{background:var(--off);}
+.feat-tag{font-family:var(--ff-m);font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;font-weight:500;}
+.feat-title{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:7px;}
+.feat-body{font-size:13px;color:var(--text-light);line-height:1.7;font-weight:300;}
+
+/* PLANES */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin-top:40px;}
+.plan{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:32px 26px;position:relative;transition:box-shadow 0.2s;}
+.plan:hover{box-shadow:0 6px 28px rgba(11,31,58,0.07);}
+.plan.featured{border-color:var(--navy);box-shadow:0 0 0 1px var(--navy);}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:10px;font-weight:600;padding:4px 14px;border-radius:20px;font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;}
+.plan-name{font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.1em;font-family:var(--ff-m);margin-bottom:16px;}
+.plan-price{font-family:var(--ff-d);font-size:42px;font-weight:700;color:var(--navy);letter-spacing:-2px;line-height:1;}
+.plan-price sup{font-size:18px;vertical-align:super;letter-spacing:0;font-weight:600;}
+.plan-price.consult{font-size:22px;letter-spacing:-0.5px;padding-top:10px;}
+.plan-period{font-size:12px;color:var(--text-light);margin-top:6px;margin-bottom:22px;}
+.plan-divider{height:1px;background:var(--border);margin-bottom:22px;}
+.plan-feats{display:flex;flex-direction:column;gap:10px;margin-bottom:26px;}
+.pf{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-mid);}
+.pf-check{color:var(--accent);font-size:14px;flex-shrink:0;margin-top:1px;font-weight:600;}
+.plan-btn{width:100%;padding:12px;border-radius:6px;font-size:13px;font-weight:600;font-family:var(--ff-b);cursor:pointer;transition:all 0.15s;letter-spacing:0.01em;}
+.plan-btn-out{background:#fff;color:var(--navy);border:1.5px solid var(--navy);}
+.plan-btn-out:hover{background:var(--navy);color:#fff;}
+.plan-btn-sol{background:var(--navy);color:#fff;border:1.5px solid var(--navy);}
+.plan-btn-sol:hover{background:var(--navy-mid);}
+
+/* CTA */
+.cta-sec{padding:100px 48px;background:var(--navy-deep);text-align:center;position:relative;overflow:hidden;}
+.cta-sec::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(37,99,184,0.12) 0%,transparent 70%);}
+.cta-in{position:relative;z-index:1;max-width:620px;margin:0 auto;}
+.cta-lbl{font-family:var(--ff-m);font-size:10px;color:rgba(255,255,255,0.22);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:20px;}
+.cta-title{font-family:var(--ff-d);font-size:clamp(26px,3.8vw,44px);font-weight:600;color:#fff;line-height:1.15;letter-spacing:-0.02em;margin-bottom:16px;}
+.cta-title em{font-style:italic;color:rgba(255,255,255,0.32);}
+.cta-desc{font-size:15px;color:rgba(255,255,255,0.38);line-height:1.8;margin-bottom:36px;font-weight:300;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+/* FOOTER */
+footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.footer-logo{font-family:var(--ff-d);font-size:16px;font-weight:600;color:var(--navy);}
+.footer-logo span{color:var(--accent);}
+.footer-links{display:flex;gap:22px;}
+.footer-links a{font-size:12px;color:var(--text-light);text-decoration:none;transition:color 0.15s;}
+.footer-links a:hover{color:var(--navy);}
+.footer-copy{font-size:11px;color:var(--text-xlight);font-family:var(--ff-m);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(7,20,40,0.72);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:12px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 32px 80px rgba(7,20,40,0.22);}
+.modal-head{padding:22px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;}
+.modal-title{font-size:15px;font-weight:600;color:var(--navy);font-family:var(--ff-d);}
+.modal-close{width:30px;height:30px;border-radius:6px;background:var(--cream);border:none;cursor:pointer;font-size:15px;color:var(--text-mid);display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:26px;}
+.ds{margin-bottom:22px;}
+.ds h4{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);font-family:var(--ff-m);margin-bottom:12px;}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.di{background:var(--off);border-radius:7px;padding:13px;}
+.dil{font-size:10px;color:var(--text-light);margin-bottom:4px;font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.04em;}
+.div2{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:3px;}
+.dis{font-size:10px;color:var(--text-xlight);font-family:var(--ff-m);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .hero{padding:60px 20px 0;}
+  .hero-inner{grid-template-columns:1fr;gap:36px;}
+  .hero-stats{grid-template-columns:repeat(3,1fr);}
+  .sec,.sec-off,.sec-navy,.cta-sec{padding:60px 20px;}
+  footer{padding:28px 20px;}
+  .dg{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;}
+}
+
+/* AUTH MODAL */
+.auth-overlay{position:fixed;inset:0;z-index:700;background:rgba(7,20,40,0.82);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:24px;}
+.auth-overlay.open{display:flex;}
+.auth-box{background:#fff;border-radius:14px;max-width:420px;width:100%;box-shadow:0 40px 100px rgba(7,20,40,0.3);position:relative;}
+.auth-head{padding:28px 28px 0;}
+.auth-logo{font-family:var(--ff-d);font-size:20px;font-weight:600;color:var(--navy);margin-bottom:16px;}
+.auth-tabs{display:flex;border-bottom:1.5px solid var(--border);margin-bottom:0;}
+.auth-tab{font-size:13px;font-weight:600;padding:12px 20px;cursor:pointer;color:var(--text-light);border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--ff-b);}
+.auth-tab.active{color:var(--navy);border-bottom-color:var(--navy);}
+.auth-body{padding:24px 28px 28px;}
+.auth-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.auth-label{font-size:11px;font-weight:600;color:var(--text-mid);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.05em;}
+.auth-inp{font-size:14px;padding:11px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--off);color:var(--text);font-family:var(--ff-b);outline:none;transition:border-color 0.15s;width:100%;}
+.auth-inp:focus{border-color:var(--accent);background:#fff;}
+.auth-btn{width:100%;padding:13px;border-radius:8px;background:var(--navy);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--ff-b);transition:background 0.15s;margin-top:4px;}
+.auth-btn:hover{background:var(--navy-mid);}
+.auth-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.auth-err{font-size:12px;color:#e05050;font-family:var(--ff-m);min-height:16px;margin-bottom:8px;}
+.auth-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:6px;background:var(--cream);border:none;cursor:pointer;font-size:15px;color:var(--text-mid);}
+.nav-user{font-size:13px;font-weight:600;color:var(--navy);font-family:var(--ff-b);background:none;border:1px solid var(--border);padding:8px 14px;border-radius:6px;cursor:pointer;}
+
+/* SCAN SECTION */
+.scan-sec{padding:80px 48px;background:linear-gradient(160deg,var(--navy-deep) 0%,#0a1f40 100%);position:relative;overflow:hidden;}
+.scan-sec::before{content:'';position:absolute;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,184,0.18) 0%,transparent 70%);pointer-events:none;}
+.scan-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;}
+.scan-btn-main{display:inline-flex;align-items:center;gap:12px;background:#fff;color:var(--navy);padding:15px 30px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:var(--ff-b);transition:all 0.18s;box-shadow:0 4px 20px rgba(255,255,255,0.08);}
+.scan-btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,255,255,0.14);}
+.scan-pulse{width:12px;height:12px;border-radius:50%;background:var(--accent);animation:blink 1.5s infinite;flex-shrink:0;}
+.scan-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;overflow:hidden;}
+.scan-card-head{background:rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.07);padding:12px 18px;display:flex;align-items:center;gap:8px;}
+.scan-idle{padding:40px 28px;text-align:center;}
+.scan-progress-wrap{padding:28px;display:none;}
+.scan-progress-wrap.show{display:block;}
+.scan-result{padding:20px;display:none;}
+.scan-result.show{display:block;}
+.scan-canvas{width:100%;height:190px;display:block;border-radius:8px;background:rgba(0,0,0,0.35);margin-bottom:14px;}
+.scan-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.scan-m{background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px;}
+.scan-ml{font-size:10px;color:rgba(255,255,255,0.3);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+.scan-mv{font-size:17px;font-weight:700;color:#fff;font-family:var(--ff-d);line-height:1.1;}
+.scan-ms{font-size:10px;color:rgba(255,255,255,0.25);font-family:var(--ff-m);}
+.scan-rec{background:rgba(79,201,142,0.08);border:1px solid rgba(79,201,142,0.2);border-radius:8px;padding:12px 14px;}
+.scan-quality-bar-wrap{height:5px;border-radius:3px;background:rgba(255,255,255,0.1);margin-bottom:4px;overflow:hidden;}
+.scan-quality-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,#2563b8,#4fc98e);transition:width 0.6s ease;}
+
+/* MEDIA UPLOAD */
+.pub-media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pub-media-zone{border:2px dashed var(--border);border-radius:9px;padding:22px;text-align:center;cursor:pointer;transition:all 0.18s;background:var(--off);position:relative;}
+.pub-media-zone:hover{border-color:var(--accent);background:rgba(37,99,184,0.03);}
+.pub-media-zone.required{border-color:rgba(224,80,80,0.4);}
+.pub-media-zone.has-files{border-color:rgba(79,201,142,0.5);background:rgba(79,201,142,0.03);}
+.pub-media-badge{position:absolute;top:8px;right:8px;background:#e05050;color:#fff;font-size:9px;font-family:var(--ff-m);font-weight:600;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:0.06em;}
+.pub-media-badge.ok{background:#22a060;}
+@media(max-width:768px){.scan-inner{grid-template-columns:1fr;gap:36px;}.scan-sec{padding:60px 20px;}.pub-media-grid{grid-template-columns:1fr;}}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.fa{opacity:0;animation:fadeUp 0.5s ease forwards;}
+.fa1{animation-delay:0.08s;}.fa2{animation-delay:0.18s;}.fa3{animation-delay:0.3s;}.fa4{animation-delay:0.44s;}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.5s ease,transform 0.5s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* PUBLISH BUTTON */
+.t-pub-btn{
+  font-size:13px;padding:9px 18px;border-radius:6px;
+  background:rgba(37,99,184,0.15);
+  border:1px solid rgba(37,99,184,0.4);
+  color:#6aabff;
+  font-family:var(--ff-b);font-weight:600;
+  cursor:pointer;transition:all 0.18s;
+  display:flex;align-items:center;white-space:nowrap;
+}
+.t-pub-btn:hover{background:rgba(37,99,184,0.28);border-color:rgba(37,99,184,0.7);color:#fff;}
+
+/* PUBLISH MODAL */
+.pub-overlay{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(7,20,40,0.78);
+  backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;padding:24px;
+}
+.pub-overlay.open{display:flex;}
+.pub-modal{
+  background:#fff;border-radius:14px;
+  max-width:720px;width:100%;
+  max-height:90vh;overflow-y:auto;
+  box-shadow:0 40px 100px rgba(7,20,40,0.28);
+}
+.pub-head{
+  padding:24px 28px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:#fff;z-index:1;
+}
+.pub-head-left{}
+.pub-head-tag{font-size:10px;font-family:var(--ff-m);font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
+.pub-head-title{font-size:17px;font-weight:600;color:var(--navy);font-family:var(--ff-d);}
+.pub-close{width:32px;height:32px;border-radius:7px;background:var(--cream);border:none;cursor:pointer;font-size:16px;color:var(--text-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pub-body{padding:28px;}
+.pub-section{margin-bottom:28px;}
+.pub-section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);font-family:var(--ff-m);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.pub-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pub-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.pub-field{display:flex;flex-direction:column;gap:5px;}
+.pub-field.full{grid-column:1/-1;}
+.pub-label{font-size:11px;font-weight:500;color:var(--text-mid);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.05em;}
+.pub-label span{color:#e05050;}
+.pub-inp{
+  font-size:13px;padding:10px 13px;
+  border-radius:7px;border:1.5px solid var(--border);
+  background:var(--off);color:var(--text);
+  font-family:var(--ff-b);outline:none;
+  transition:border-color 0.15s;
+  width:100%;
+}
+.pub-inp:focus{border-color:var(--accent);background:#fff;}
+.pub-inp::placeholder{color:var(--text-xlight);}
+.pub-select{
+  font-size:13px;padding:10px 13px;
+  border-radius:7px;border:1.5px solid var(--border);
+  background:var(--off);color:var(--text);
+  font-family:var(--ff-b);outline:none;cursor:pointer;
+  transition:border-color 0.15s;width:100%;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236b7e96' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;
+}
+.pub-select:focus{border-color:var(--accent);background-color:#fff;}
+.pub-textarea{
+  font-size:13px;padding:10px 13px;
+  border-radius:7px;border:1.5px solid var(--border);
+  background:var(--off);color:var(--text);
+  font-family:var(--ff-b);outline:none;
+  transition:border-color 0.15s;
+  width:100%;resize:vertical;min-height:90px;line-height:1.6;
+}
+.pub-textarea:focus{border-color:var(--accent);background:#fff;}
+.pub-textarea::placeholder{color:var(--text-xlight);}
+.pub-tags-wrap{display:flex;flex-wrap:wrap;gap:8px;}
+.pub-tag-opt{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;padding:6px 12px;border-radius:5px;
+  border:1.5px solid var(--border);background:#fff;
+  cursor:pointer;color:var(--text-mid);font-family:var(--ff-b);
+  transition:all 0.15s;user-select:none;
+}
+.pub-tag-opt:hover{border-color:var(--accent);color:var(--navy);}
+.pub-tag-opt.selected{border-color:var(--accent);background:rgba(37,99,184,0.06);color:var(--navy);font-weight:600;}
+.pub-tag-opt input{display:none;}
+.pub-upload-area{
+  border:2px dashed var(--border);border-radius:9px;
+  padding:28px;text-align:center;cursor:pointer;
+  transition:all 0.18s;background:var(--off);
+}
+.pub-upload-area:hover{border-color:var(--accent);background:rgba(37,99,184,0.03);}
+.pub-upload-icon{font-size:28px;margin-bottom:8px;}
+.pub-upload-text{font-size:13px;color:var(--text-mid);margin-bottom:4px;}
+.pub-upload-sub{font-size:11px;color:var(--text-xlight);font-family:var(--ff-m);}
+.pub-foot{
+  padding:20px 28px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;
+  position:sticky;bottom:0;background:#fff;
+}
+.pub-note{font-size:11px;color:var(--text-xlight);font-family:var(--ff-m);}
+.pub-foot-btns{display:flex;gap:10px;}
+.pub-cancel{font-size:13px;color:var(--text-mid);background:none;border:1.5px solid var(--border);padding:10px 20px;border-radius:7px;cursor:pointer;font-family:var(--ff-b);transition:all 0.15s;}
+.pub-cancel:hover{border-color:var(--navy);color:var(--navy);}
+.pub-submit{font-size:13px;font-weight:600;color:#fff;background:var(--navy);border:none;padding:10px 24px;border-radius:7px;cursor:pointer;font-family:var(--ff-b);transition:background 0.15s;}
+.pub-submit:hover{background:var(--navy-mid);}
+.pub-success{display:none;text-align:center;padding:40px 28px;}
+.pub-success-icon{font-size:44px;margin-bottom:16px;}
+.pub-success-title{font-family:var(--ff-d);font-size:22px;font-weight:600;color:var(--navy);margin-bottom:8px;}
+.pub-success-desc{font-size:14px;color:var(--text-light);line-height:1.7;}
+
+
+/* ── CAPITAL MATCHER ── */
+.cap-wrap{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:36px;margin-top:40px;}
+.cap-form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;}
+.cap-field{display:flex;flex-direction:column;gap:6px;}
+.cap-label{font-size:11px;font-weight:600;color:var(--text-mid);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.07em;}
+.cap-inp{font-size:14px;padding:11px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--off);color:var(--text);font-family:var(--ff-b);outline:none;transition:border-color 0.15s;width:100%;}
+.cap-inp:focus{border-color:var(--accent);background:#fff;}
+.cap-inp::placeholder{color:var(--text-xlight);}
+.cap-select{font-size:13px;padding:11px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--off);color:var(--text);font-family:var(--ff-b);outline:none;cursor:pointer;width:100%;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236b7e96' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.cap-select:focus{border-color:var(--accent);}
+.cap-range-wrap{margin-bottom:24px;}
+.cap-range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-xlight);font-family:var(--ff-m);margin-top:6px;}
+.cap-range{width:100%;height:4px;border-radius:2px;background:var(--border);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;}
+.cap-range::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--navy);cursor:pointer;border:3px solid #fff;box-shadow:0 1px 6px rgba(11,31,58,0.2);}
+.cap-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--navy);cursor:pointer;border:3px solid #fff;}
+.cap-range-val{font-family:var(--ff-d);font-size:28px;font-weight:600;color:var(--navy);letter-spacing:-1px;margin-bottom:8px;}
+.cap-range-sub{font-size:12px;color:var(--text-light);margin-bottom:16px;}
+.cap-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+.cap-tag{font-size:12px;padding:6px 14px;border-radius:5px;border:1.5px solid var(--border);background:#fff;cursor:pointer;color:var(--text-mid);font-family:var(--ff-b);transition:all 0.15s;user-select:none;}
+.cap-tag:hover{border-color:var(--accent);color:var(--navy);}
+.cap-tag.sel{border-color:var(--navy);background:var(--navy);color:#fff;font-weight:600;}
+.cap-btn{background:var(--navy);color:#fff;border:none;padding:13px 32px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--ff-b);transition:background 0.15s;display:flex;align-items:center;gap:8px;}
+.cap-btn:hover{background:var(--navy-mid);}
+.cap-btn svg{flex-shrink:0;}
+/* Results */
+.cap-results{display:none;margin-top:32px;border-top:1.5px solid var(--border);padding-top:28px;}
+.cap-results.show{display:block;}
+.cap-res-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.cap-res-title{font-family:var(--ff-d);font-size:20px;font-weight:600;color:var(--navy);}
+.cap-res-sub{font-size:12px;color:var(--text-light);font-family:var(--ff-m);}
+.cap-res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.cap-card{background:var(--off);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:all 0.18s;cursor:pointer;}
+.cap-card:hover{border-color:var(--navy);box-shadow:0 4px 20px rgba(11,31,58,0.08);}
+.cap-card.top{border-color:var(--navy);box-shadow:0 0 0 3px rgba(11,31,58,0.06);}
+.cap-card-head{background:var(--navy-deep);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;}
+.cap-card-match{font-family:var(--ff-m);font-size:11px;font-weight:600;color:#4fc98e;letter-spacing:0.04em;}
+.cap-card-rank{background:rgba(255,255,255,0.08);border-radius:4px;padding:3px 8px;font-size:10px;color:rgba(255,255,255,0.4);font-family:var(--ff-m);}
+.cap-card-body{padding:14px 16px;}
+.cap-card-addr{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:2px;}
+.cap-card-zone{font-size:11px;color:var(--text-light);font-family:var(--ff-m);margin-bottom:12px;}
+.cap-card-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.cap-card-sp{background:#fff;border-radius:5px;padding:8px 10px;border:1px solid var(--border);}
+.cap-sp-l{font-size:10px;color:var(--text-xlight);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;}
+.cap-sp-v{font-size:13px;font-weight:600;color:var(--navy);font-family:var(--ff-m);}
+.cap-card-reasons{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.cap-reason{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--text-mid);line-height:1.4;}
+.cap-reason-icon{color:var(--accent);font-size:12px;flex-shrink:0;margin-top:1px;}
+.cap-card-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fff;}
+.cap-card-price{font-family:var(--ff-d);font-size:16px;font-weight:600;color:var(--navy);}
+.cap-card-inc{font-size:10px;color:var(--text-light);font-family:var(--ff-m);margin-top:1px;}
+.cap-view-btn{font-size:11px;font-weight:600;color:var(--accent);background:none;border:1px solid rgba(37,99,184,0.2);padding:5px 12px;border-radius:5px;cursor:pointer;font-family:var(--ff-b);transition:all 0.15s;}
+.cap-view-btn:hover{background:rgba(37,99,184,0.06);border-color:var(--accent);}
+.cap-no-results{text-align:center;padding:40px 20px;color:var(--text-light);}
+.cap-no-results .cap-no-icon{font-size:36px;margin-bottom:12px;}
+.cap-loading{display:none;text-align:center;padding:32px;color:var(--text-light);}
+.cap-loading.show{display:block;}
+.cap-spinner{width:32px;height:32px;border:2.5px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media(max-width:768px){.cap-form-row{grid-template-columns:1fr;}}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">
+      <!-- Construction/building logo - crane + structure -->
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <!-- Building structure -->
+        <rect x="3" y="9" width="10" height="10" rx="0.5" fill="white" opacity="0.9"/>
+        <!-- Floors -->
+        <line x1="3" y1="12.5" x2="13" y2="12.5" stroke="#0B1F3A" stroke-width="0.7"/>
+        <line x1="3" y1="15.5" x2="13" y2="15.5" stroke="#0B1F3A" stroke-width="0.7"/>
+        <!-- Windows -->
+        <rect x="5" y="10.5" width="2" height="1.5" rx="0.2" fill="#0B1F3A" opacity="0.5"/>
+        <rect x="9" y="10.5" width="2" height="1.5" rx="0.2" fill="#0B1F3A" opacity="0.5"/>
+        <!-- Crane arm -->
+        <line x1="12" y1="9" x2="12" y2="2" stroke="white" stroke-width="1.2" opacity="0.9"/>
+        <line x1="12" y1="2" x2="18" y2="2" stroke="white" stroke-width="1.2" opacity="0.9"/>
+        <line x1="18" y1="2" x2="18" y2="6" stroke="white" stroke-width="1" opacity="0.7"/>
+        <!-- Crane counterweight -->
+        <line x1="12" y1="2" x2="8" y2="2" stroke="white" stroke-width="1.2" opacity="0.7"/>
+        <rect x="7" y="1" width="2" height="2" rx="0.3" fill="white" opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="nav-logo-text">Plotr<span style="color:var(--accent);">.</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="#producto">Producto</a>
+    <a href="#terrenos">Terrenos</a>
+    <a href="#escanear">Escanear terreno</a>
+    <a href="#capital-match">Calculadora</a>
+    <a href="#funciona">Metodología</a>
+    <a href="#planes">Planes</a>
+  </div>
+  <div class="nav-right" id="navRight">
+    <button class="btn-ghost" onclick="openAuth('login')">Ingresar</button>
+    <button class="btn-navy" onclick="openAuth('register')">Crear cuenta</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-pill fa fa1">
+        <span class="hero-pill-dot"></span>
+        Plataforma técnica · Buenos Aires
+      </div>
+      <h1 class="hero-h fa fa2">Evaluá un terreno antes de<br><em>comprometerte con él.</em></h1>
+      <p class="hero-sub fa fa3">Plotr centraliza datos normativos, geotécnicos y catastrales de cada lote en un único informe técnico estructurado. Para constructoras y desarrolladoras que operan con precisión.</p>
+      <div class="hero-btns fa fa4">
+        <button class="btn-white">Solicitar demostración</button>
+        <button class="btn-outline-w">Ver terrenos disponibles</button>
+      </div>
+      <div class="hero-trust fa fa4" style="margin-top:32px;">
+        <span class="ht-txt">Código urbanístico CABA</span>
+        <div class="ht-line"></div>
+        <span class="ht-txt">Catastro verificado</span>
+        <div class="ht-line"></div>
+        <span class="ht-txt">Análisis geotécnico</span>
+      </div>
+    </div>
+    <div class="fa fa3">
+      <div class="hero-card">
+        <div class="hcard-head">
+          <div class="hch-dots">
+            <div class="hch-dot" style="background:#ff5f57"></div>
+            <div class="hch-dot" style="background:#febc2e"></div>
+            <div class="hch-dot" style="background:#28c840"></div>
+          </div>
+          <span class="hch-lbl">PLOTR · VISUALIZADOR 3D · Monroe 3400, Belgrano</span>
+        </div>
+        <canvas id="hero-canvas"></canvas>
+        <div class="hcard-foot">
+          <div class="hcf"><div class="hcf-l">FOT</div><div class="hcf-v">5.1</div></div>
+          <div class="hcf"><div class="hcf-l">Napa freática</div><div class="hcf-v ok">7.8 m</div></div>
+          <div class="hcf"><div class="hcf-l">Riesgo hídrico</div><div class="hcf-v ok">Bajo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-n">+340</div><div class="hs-l">Terrenos verificados</div></div>
+    <div class="hs"><div class="hs-n">48h</div><div class="hs-l">Tiempo de análisis</div></div>
+    <div class="hs"><div class="hs-n">100%</div><div class="hs-l">Fuentes oficiales</div></div>
+  </div>
+</section>
+
+<!-- TIPOS -->
+<section class="sec-off" id="producto">
+  <div class="s-in">
+    <div class="s-tag reveal">Perfiles de uso</div>
+    <h2 class="sh reveal">Para quienes deciden<br><em>con datos reales.</em></h2>
+    <p class="s-desc reveal">Plotr está diseñado para profesionales del sector que requieren información técnica verificada antes de comprometer capital.</p>
+    <div class="tipos-grid">
+      <div class="tipo-card active reveal" onclick="setTipo(this)"><div class="tipo-icon">🏗️</div><div class="tipo-name">Constructoras</div><div class="tipo-desc">Evaluación técnica previa a licitación o compra</div></div>
+      <div class="tipo-card reveal" onclick="setTipo(this)"><div class="tipo-icon">📐</div><div class="tipo-name">Desarrolladoras</div><div class="tipo-desc">Análisis de factibilidad y edificabilidad por proyecto</div></div>
+      <div class="tipo-card reveal" onclick="setTipo(this)"><div class="tipo-icon">💼</div><div class="tipo-name">Inversores</div><div class="tipo-desc">Due diligence técnico antes de comprometer capital</div></div>
+      <div class="tipo-card reveal" onclick="setTipo(this)"><div class="tipo-icon">📏</div><div class="tipo-name">Estudios de arquitectura</div><div class="tipo-desc">Normativa urbanística integrada al proceso de diseño</div></div>
+      <div class="tipo-card reveal" onclick="setTipo(this)"><div class="tipo-icon">⚖️</div><div class="tipo-name">Estudios jurídicos</div><div class="tipo-desc">Estado catastral y dominial verificado por lote</div></div>
+      <div class="tipo-card reveal" onclick="setTipo(this)"><div class="tipo-icon">🏦</div><div class="tipo-name">Entidades financieras</div><div class="tipo-desc">Valuación técnica para financiamiento de proyectos</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TERRENOS -->
+<section class="sec-navy" id="terrenos">
+  <div class="s-in">
+    <div class="s-tag-w reveal">Base de datos</div>
+    <h2 class="sh-w reveal">Terrenos con ficha<br><em>técnica completa.</em></h2>
+    <p class="s-desc-w reveal">Cada lote incluye datos normativos del Código Urbanístico CABA, análisis geotécnico del subsuelo y estado catastral verificado en tiempo real.</p>
+    <div class="t-controls reveal">
+      <input class="t-inp" type="text" placeholder="Buscar por dirección o barrio...">
+      <select class="t-sel"><option>Todos los usos</option><option>Residencial</option><option>Comercial</option><option>Mixto</option><option>Industrial</option></select>
+      <select class="t-sel"><option>Todos los barrios</option><option>CABA</option><option>GBA Norte</option><option>GBA Sur</option></select>
+      <button class="t-sbtn">Buscar</button>
+      <button class="t-pub-btn" onclick="openPublish()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="margin-right:6px;vertical-align:-1px;"><line x1="6.5" y1="1" x2="6.5" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="6.5" x2="12" y2="6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Publicar terreno
+      </button>
+    </div>
+    <div class="terrenos-grid" id="t-grid"></div>
+  </div>
+</section>
+
+
+<!-- SCAN 3D -->
+<section class="scan-sec" id="escanear">
+  <div class="scan-inner">
+    <div>
+      <div class="s-tag-w reveal" style="color:rgba(74,158,255,0.8);">Nueva funcionalidad · Exclusivo móvil</div>
+      <h2 class="sh-w reveal">Escaneá el terreno<br><em>con tu celular.</em></h2>
+      <p class="s-desc-w reveal">Grabá un video corto dando una vuelta alrededor del lote. Plotr analiza los frames con visión computacional (Structure-from-Motion) y genera un modelo 3D con métricas reales: pendiente, área estimada y recomendación de fundación.</p>
+      <div class="reveal" style="display:flex;flex-direction:column;gap:12px;margin-top:4px;">
+        <button class="scan-btn-main" onclick="openScanCamera()">
+          <div class="scan-pulse"></div>
+          Escanear terreno
+        </button>
+        <input type="file" id="scan-file-input" accept="video/*,image/*" multiple capture="environment" style="display:none" onchange="handleScanFiles(this)">
+        <p style="font-size:12px;color:rgba(255,255,255,0.28);font-family:var(--ff-m);">Grabá 15–30 seg. caminando alrededor del lote · MP4, MOV, imágenes · Sin instalación</p>
+      </div>
+      <div class="hero-trust reveal" style="margin-top:28px;">
+        <span class="ht-txt">Structure-from-Motion</span>
+        <div class="ht-line"></div>
+        <span class="ht-txt">OpenCV</span>
+        <div class="ht-line"></div>
+        <span class="ht-txt">Modelo 3D en tiempo real</span>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="scan-card">
+        <div class="scan-card-head">
+          <div class="hch-dots">
+            <div class="hch-dot" style="background:#ff5f57"></div>
+            <div class="hch-dot" style="background:#febc2e"></div>
+            <div class="hch-dot" style="background:#28c840"></div>
+          </div>
+          <span class="hch-lbl" id="scanCardLabel">PLOTR · ANÁLISIS 3D · Sin escaneo activo</span>
+        </div>
+        <div class="scan-idle" id="scanIdle">
+          <div style="font-size:44px;margin-bottom:14px;">📷</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.45);margin-bottom:6px;font-weight:500;">Sin escaneo activo</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.22);font-family:var(--ff-m);">Presioná el botón para abrir la cámara</div>
+        </div>
+        <div class="scan-progress-wrap" id="scanProgress">
+          <div style="text-align:center;margin-bottom:18px;">
+            <div class="cap-spinner" style="border-top-color:#4a9eff;margin-bottom:12px;"></div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.55);font-family:var(--ff-m);" id="scanProgressTxt">Subiendo archivos...</div>
+          </div>
+          <div class="scan-quality-bar-wrap"><div class="scan-quality-bar" id="scanQBar" style="width:5%"></div></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.25);font-family:var(--ff-m);text-align:center;margin-top:4px;" id="scanProgressPct">Procesando...</div>
+        </div>
+        <div class="scan-result" id="scanResult">
+          <canvas class="scan-canvas" id="scanCanvas"></canvas>
+          <div class="scan-metrics">
+            <div class="scan-m"><div class="scan-ml">Área estimada</div><div class="scan-mv" id="srArea">—</div><div class="scan-ms">m²</div></div>
+            <div class="scan-m"><div class="scan-ml">Pendiente</div><div class="scan-mv" id="srSlope">—</div><div class="scan-ms">%</div></div>
+            <div class="scan-m"><div class="scan-ml">Tipo de terreno</div><div class="scan-mv" style="font-size:12px;" id="srType">—</div><div class="scan-ms">clasificación</div></div>
+            <div class="scan-m"><div class="scan-ml">Calidad del scan</div><div class="scan-mv" id="srQuality">—</div><div class="scan-ms">/ 100</div></div>
+          </div>
+          <div class="scan-rec">
+            <div style="font-size:10px;color:rgba(79,201,142,0.7);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Recomendación de fundación</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.8);" id="srFoundation">—</div>
+          </div>
+          <button style="width:100%;margin-top:12px;padding:10px;border-radius:7px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);font-size:12px;font-family:var(--ff-b);cursor:pointer;" onclick="resetScan()">Nuevo escaneo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPITAL MATCHER -->
+<section class="sec" id="capital-match" style="background:var(--off);">
+  <div class="s-in">
+    <div class="s-tag reveal">Recomendador de terrenos</div>
+    <h2 class="sh reveal">Encontrá el terreno<br><em>según tu capital disponible.</em></h2>
+    <p class="s-desc reveal">Ingresá tu presupuesto, el tipo de desarrollo que buscás y la zona de interés. Plotr identifica los terrenos de la base de datos que mejor se ajustan a tu capacidad de inversión.</p>
+
+    <div class="cap-wrap reveal">
+      <!-- CAPITAL INPUT -->
+      <div style="margin-bottom:28px;">
+        <div class="cap-label" style="margin-bottom:12px;">Capital disponible para adquisición del terreno</div>
+        <div class="cap-range-val" id="capValDisplay">USD 250.000</div>
+        <div class="cap-range-sub">Monto destinado exclusivamente a la compra del lote, sin incluir costos de construcción.</div>
+        <input type="range" class="cap-range" id="capRange" min="50000" max="2000000" step="10000" value="250000" oninput="updateCapVal(this.value)">
+        <div class="cap-range-labels"><span>USD 50.000</span><span>USD 500.000</span><span>USD 1.000.000</span><span>USD 2.000.000+</span></div>
+      </div>
+
+      <!-- FORM ROW -->
+      <div class="cap-form-row">
+        <div class="cap-field">
+          <label class="cap-label">Tipo de desarrollo</label>
+          <select class="cap-select" id="capTipo">
+            <option value="todos">Cualquier tipo</option>
+            <option value="residencial">Residencial</option>
+            <option value="comercial">Comercial</option>
+            <option value="mixto">Mixto residencial / comercial</option>
+            <option value="industrial">Industrial / Logístico</option>
+          </select>
+        </div>
+        <div class="cap-field">
+          <label class="cap-label">Zona preferida</label>
+          <select class="cap-select" id="capZona">
+            <option value="todas">Cualquier zona</option>
+            <option value="caba">CABA</option>
+            <option value="gba-norte">GBA Norte</option>
+            <option value="gba-sur">GBA Sur</option>
+            <option value="gba-oeste">GBA Oeste</option>
+          </select>
+        </div>
+        <div class="cap-field">
+          <label class="cap-label">Superficie mínima (m²)</label>
+          <input type="number" class="cap-inp" id="capM2" placeholder="Ej: 300" min="0">
+        </div>
+      </div>
+
+      <!-- PRIORIDADES -->
+      <div style="margin-bottom:24px;">
+        <div class="cap-label" style="margin-bottom:10px;">Prioridades del proyecto (seleccioná las que apliquen)</div>
+        <div class="cap-tags">
+          <span class="cap-tag" onclick="toggleCapTag(this)">Alta edificabilidad</span>
+          <span class="cap-tag" onclick="toggleCapTag(this)">Napa profunda</span>
+          <span class="cap-tag" onclick="toggleCapTag(this)">Subsuelos viables</span>
+          <span class="cap-tag" onclick="toggleCapTag(this)">Bajo riesgo hídrico</span>
+          <span class="cap-tag" onclick="toggleCapTag(this)">Zona premium</span>
+          <span class="cap-tag" onclick="toggleCapTag(this)">Documentación completa</span>
+          <span class="cap-tag" onclick="toggleCapTag(this)">Sin intermediarios</span>
+          <span class="cap-tag" onclick="toggleCapTag(this)">Gran superficie</span>
+        </div>
+      </div>
+
+      <button class="cap-btn" onclick="runCapMatch()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="white" stroke-width="1.5"/><line x1="9.5" y1="9.5" x2="13" y2="13" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Buscar terrenos compatibles
+      </button>
+
+      <!-- LOADING -->
+      <div class="cap-loading" id="capLoading">
+        <div class="cap-spinner"></div>
+        <div style="font-size:13px;font-family:var(--ff-m);">Analizando base de datos · Calculando compatibilidad...</div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="cap-results" id="capResults">
+        <div class="cap-res-header">
+          <div>
+            <div class="cap-res-title" id="capResTitle">Terrenos recomendados</div>
+            <div class="cap-res-sub" id="capResSub"></div>
+          </div>
+          <button onclick="resetCapMatch()" style="font-size:12px;color:var(--text-light);background:none;border:1px solid var(--border);padding:7px 14px;border-radius:6px;cursor:pointer;font-family:var(--ff-b);">Nueva búsqueda</button>
+        </div>
+        <div class="cap-res-grid" id="capResGrid"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="sec" id="funciona">
+  <div class="s-in">
+    <div class="s-tag reveal">Metodología</div>
+    <h2 class="sh reveal">Un proceso técnico<br><em>en cuatro etapas.</em></h2>
+    <p class="s-desc reveal">Desde la identificación del lote hasta el informe final estructurado, listo para presentar ante inversores, bancos o directorios.</p>
+    <div class="how-grid reveal">
+      <div class="how-step"><div class="how-num"><span>01</span> — Relevamiento</div><div class="how-title">Identificación del lote</div><div class="how-body">Ingresás la dirección o terreno catastral. Plotr cruza la información con fuentes oficiales: API CABA, ARBA y Catastro Nacional.</div></div>
+      <div class="how-step"><div class="how-num"><span>02</span> — Normativa</div><div class="how-title">Análisis urbanístico</div><div class="how-body">Se extraen automáticamente FOT, altura máxima, uso del suelo y restricciones del Código Urbanístico vigente para ese terreno específica.</div></div>
+      <div class="how-step"><div class="how-num"><span>03</span> — Geotecnia</div><div class="how-title">Evaluación del subsuelo</div><div class="how-body">Profundidad de napa freática, tipo de suelo, riesgo hídrico y viabilidad de subsuelos, con fuentes georreferenciadas de SEGEMAR.</div></div>
+      <div class="how-step"><div class="how-num"><span>04</span> — Informe</div><div class="how-title">Documento técnico ejecutivo</div><div class="how-body">Informe estructurado en PDF, listo para presentar ante inversores, entidades financieras o socios estratégicos. Descarga inmediata.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sec-off">
+  <div class="s-in">
+    <div class="s-tag reveal">Funcionalidades</div>
+    <h2 class="sh reveal">Toda la información técnica<br><em>en un solo lugar.</em></h2>
+    <div class="feat-grid reveal">
+      <div class="feat-card"><div class="feat-tag">Normativa</div><div class="feat-title">Código Urbanístico integrado</div><div class="feat-body">FOT, altura máxima, uso del suelo y restricciones por terreno, extraídos directamente de la base oficial del GCBA y actualizados en tiempo real.</div></div>
+      <div class="feat-card"><div class="feat-tag">Geotecnia</div><div class="feat-title">Análisis de subsuelo</div><div class="feat-body">Profundidad de napa freática, tipo de suelo y viabilidad de subsuelos. Información georreferenciada de SEGEMAR y Ciudad 3D GCBA.</div></div>
+      <div class="feat-card"><div class="feat-tag">Catastro</div><div class="feat-title">Estado dominial verificado</div><div class="feat-body">Verificación del estado catastral del lote: baldío confirmado, titularidad, afectaciones y situación registral actualizada por fuentes oficiales.</div></div>
+      <div class="feat-card"><div class="feat-tag">Visualización</div><div class="feat-title">Modelo 3D del potencial edificable</div><div class="feat-body">Representación tridimensional del volumen máximo permitido según normativa vigente. Visualizá el desarrollo antes de adquirir el lote.</div></div>
+      <div class="feat-card"><div class="feat-tag">Documentación</div><div class="feat-title">Informe técnico ejecutivo</div><div class="feat-body">Exportación en PDF estructurado con todos los datos organizados para presentar ante inversores, bancos o socios. Sin intermediarios.</div></div>
+      <div class="feat-card"><div class="feat-tag">Comparativa</div><div class="feat-title">Análisis multi-lote</div><div class="feat-body">Comparación simultánea de múltiples terrenos en edificabilidad, riesgo geotécnico y potencial de desarrollo. Decisiones respaldadas en datos.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANES -->
+<section class="sec" id="planes">
+  <div class="s-in">
+    <div class="s-tag reveal">Planes de acceso</div>
+    <h2 class="sh reveal">Estructura de<br><em>suscripciones.</em></h2>
+    <p class="s-desc reveal">Acceso escalonado según el volumen de operaciones. Sin permanencia mínima. Cancelación en cualquier momento.</p>
+    <div class="pricing-grid reveal">
+
+      <div class="plan">
+        <div class="plan-name">Básico</div>
+        <div class="plan-price"><sup>$</sup>0</div>
+        <div class="plan-period">Período de prueba · 30 días sin cargo</div>
+        <div class="plan-divider"></div>
+        <div class="plan-feats">
+          <div class="pf"><span class="pf-check">✓</span>Hasta 3 fichas técnicas por mes</div>
+          <div class="pf"><span class="pf-check">✓</span>Datos normativos básicos</div>
+          <div class="pf"><span class="pf-check">✓</span>Visualizador 3D del lote</div>
+          <div class="pf"><span class="pf-check">✓</span>Sin tarjeta de crédito requerida</div>
+        </div>
+        <button class="plan-btn plan-btn-out">Comenzar gratis</button>
+      </div>
+
+      <div class="plan featured">
+        <div class="plan-badge">Más elegido</div>
+        <div class="plan-name">Profesional</div>
+        <div class="plan-price"><sup>$</sup>89</div>
+        <div class="plan-period">USD / mes · facturación mensual</div>
+        <div class="plan-divider"></div>
+        <div class="plan-feats">
+          <div class="pf"><span class="pf-check">✓</span>Fichas técnicas ilimitadas</div>
+          <div class="pf"><span class="pf-check">✓</span>Análisis geotécnico completo</div>
+          <div class="pf"><span class="pf-check">✓</span>Exportación PDF ejecutivo</div>
+          <div class="pf"><span class="pf-check">✓</span>Comparativa multi-lote</div>
+          <div class="pf"><span class="pf-check">✓</span>Soporte técnico directo</div>
+        </div>
+        <button class="plan-btn plan-btn-sol">Solicitar acceso</button>
+      </div>
+
+      <div class="plan">
+        <div class="plan-name">Corporativo</div>
+        <div class="plan-price consult">A consultar</div>
+        <div class="plan-period">Para equipos y desarrolladoras</div>
+        <div class="plan-divider"></div>
+        <div class="plan-feats">
+          <div class="pf"><span class="pf-check">✓</span>Todo lo del plan Profesional</div>
+          <div class="pf"><span class="pf-check">✓</span>Acceso multi-usuario</div>
+          <div class="pf"><span class="pf-check">✓</span>Integración vía API</div>
+          <div class="pf"><span class="pf-check">✓</span>Informes a medida</div>
+          <div class="pf"><span class="pf-check">✓</span>Gerente de cuenta dedicado</div>
+        </div>
+        <button class="plan-btn plan-btn-out">Contactar al equipo</button>
+      </div>
+
+    </div>
+    <p style="text-align:center;margin-top:18px;font-size:11px;color:var(--text-xlight);font-family:var(--ff-m);">Sin permanencia mínima · Cancelación en cualquier momento · Precios en USD</p>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-sec">
+  <div class="cta-in">
+    <div class="cta-lbl">Plotr · Acceso anticipado</div>
+    <h2 class="cta-title">Decisiones de desarrollo<br><em>respaldadas en datos.</em></h2>
+    <p class="cta-desc">Las primeras 50 constructoras y desarrolladoras acceden sin costo durante los primeros 6 meses. Sin intermediarios ni compromisos.</p>
+    <div class="cta-btns">
+      <button class="btn-white">Solicitar acceso anticipado</button>
+      <button class="btn-outline-w">Ver demostración</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Plotr<span style="color:var(--accent);">.</span></div>
+  <div class="footer-links">
+    <a href="#">Producto</a>
+    <a href="#">Metodología</a>
+    <a href="#">Planes</a>
+    <a href="#">Contacto</a>
+    <a href="#">Privacidad</a>
+  </div>
+  <div class="footer-copy">© 2026 Plotr · Buenos Aires, Argentina</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">Ficha técnica</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+// Reemplazá esta URL con la URL de tu backend en Railway después del deploy.
+const API_BASE = 'https://plotr.onrender.com';
+
+// ── AUTH TOKEN ────────────────────────────────────────────────────────────────
+function getToken() { return localStorage.getItem('plotr_token'); }
+function setToken(t) { localStorage.setItem('plotr_token', t); }
+function clearToken() { localStorage.removeItem('plotr_token'); localStorage.removeItem('plotr_user'); }
+function getUser() { try { return JSON.parse(localStorage.getItem('plotr_user') || 'null'); } catch(e) { return null; } }
+function setUser(u) { localStorage.setItem('plotr_user', JSON.stringify(u)); }
+function isLoggedIn() { return !!getToken(); }
+
+function updateNavAuth() {
+  var nr = document.getElementById('navRight');
+  var u = getUser();
+  if(u) {
+    nr.innerHTML = '<span style="font-size:13px;color:var(--text-mid);font-family:var(--ff-m);">👤 '+u.nombre.split(' ')[0]+'</span>'
+      + '<button class="btn-ghost" onclick="logout()" style="font-size:12px;">Salir</button>';
+  } else {
+    nr.innerHTML = '<button class="btn-ghost" onclick="openAuth(\'login\')">Ingresar</button>'
+      + '<button class="btn-navy" onclick="openAuth(\'register\')">Crear cuenta</button>';
+  }
+}
+
+function logout() { clearToken(); updateNavAuth(); }
+
+// ── AUTH MODAL ────────────────────────────────────────────────────────────────
+var _authCallback = null;
+
+function openAuth(tab, callback) {
+  _authCallback = callback || null;
+  document.getElementById('auth-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  switchAuthTab(tab || 'login');
+  document.getElementById('loginErr').textContent = '';
+  document.getElementById('regErr').textContent = '';
+}
+function closeAuth() {
+  document.getElementById('auth-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeAuthOutside(e) { if(e.target === document.getElementById('auth-overlay')) closeAuth(); }
+function switchAuthTab(tab) {
+  document.getElementById('authLoginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('authRegisterForm').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+}
+
+async function submitLogin() {
+  var email = document.getElementById('loginEmail').value.trim();
+  var pass  = document.getElementById('loginPassword').value;
+  var errEl = document.getElementById('loginErr');
+  var btn   = document.getElementById('loginBtn');
+  if(!email || !pass) { errEl.textContent = 'Completá email y contraseña.'; return; }
+  btn.disabled = true; btn.textContent = 'Ingresando...';
+  errEl.textContent = '';
+  try {
+    var r = await fetch(API_BASE + '/auth/login', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email: email, password: pass})
+    });
+    var d = await r.json();
+    if(!r.ok) { errEl.textContent = d.detail || 'Error al ingresar.'; return; }
+    setToken(d.access_token); setUser(d.user);
+    updateNavAuth(); closeAuth();
+    if(_authCallback) { _authCallback(); _authCallback = null; }
+  } catch(e) {
+    errEl.textContent = 'No se pudo conectar con el servidor.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Ingresar';
+  }
+}
+
+async function submitRegister() {
+  var nombre = document.getElementById('regNombre').value.trim();
+  var email  = document.getElementById('regEmail').value.trim();
+  var pass   = document.getElementById('regPassword').value;
+  var errEl  = document.getElementById('regErr');
+  var btn    = document.getElementById('regBtn');
+  if(!nombre || !email || !pass) { errEl.textContent = 'Completá todos los campos.'; return; }
+  if(pass.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; return; }
+  btn.disabled = true; btn.textContent = 'Creando cuenta...';
+  errEl.textContent = '';
+  try {
+    var r = await fetch(API_BASE + '/auth/register', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({nombre: nombre, email: email, password: pass})
+    });
+    var d = await r.json();
+    if(!r.ok) { errEl.textContent = d.detail || 'Error al registrarse.'; return; }
+    setToken(d.access_token); setUser(d.user);
+    updateNavAuth(); closeAuth();
+    if(_authCallback) { _authCallback(); _authCallback = null; }
+  } catch(e) {
+    errEl.textContent = 'No se pudo conectar con el servidor.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Crear cuenta gratis';
+  }
+}
+
+// ── SCAN 3D ───────────────────────────────────────────────────────────────────
+var _scanPollInterval = null;
+
+function openScanCamera() {
+  if(!isLoggedIn()) {
+    openAuth('login', function(){ openScanCamera(); });
+    return;
+  }
+  document.getElementById('scan-file-input').click();
+}
+
+function resetScan() {
+  document.getElementById('scanIdle').style.display = 'block';
+  document.getElementById('scanProgress').classList.remove('show');
+  document.getElementById('scanResult').classList.remove('show');
+  document.getElementById('scanCardLabel').textContent = 'PLOTR · ANÁLISIS 3D · Sin escaneo activo';
+  document.getElementById('scan-file-input').value = '';
+  if(_scanPollInterval) clearInterval(_scanPollInterval);
+}
+
+async function handleScanFiles(input) {
+  if(!input.files || !input.files.length) return;
+  document.getElementById('scanIdle').style.display = 'none';
+  document.getElementById('scanProgress').classList.add('show');
+  document.getElementById('scanResult').classList.remove('show');
+  document.getElementById('scanProgressTxt').textContent = 'Subiendo archivos...';
+  document.getElementById('scanQBar').style.width = '10%';
+  document.getElementById('scanProgressPct').textContent = 'Subiendo...';
+
+  var fd = new FormData();
+  for(var i = 0; i < input.files.length; i++) fd.append('archivos', input.files[i]);
+
+  try {
+    var r = await fetch(API_BASE + '/scan/', {
+      method: 'POST',
+      headers: {'Authorization': 'Bearer ' + getToken()},
+      body: fd
+    });
+    if(!r.ok) {
+      var e = await r.json();
+      alert('Error al subir: ' + (e.detail || 'Error desconocido'));
+      resetScan(); return;
+    }
+    var scan = await r.json();
+    document.getElementById('scanQBar').style.width = '30%';
+    document.getElementById('scanProgressTxt').textContent = 'Procesando modelo 3D...';
+    document.getElementById('scanProgressPct').textContent = 'Analizando frames...';
+    pollScan(scan.id);
+  } catch(e) {
+    alert('No se pudo conectar con el servidor.');
+    resetScan();
+  }
+}
+
+function pollScan(scanId) {
+  var attempts = 0;
+  var progress = 30;
+  _scanPollInterval = setInterval(async function() {
+    attempts++;
+    progress = Math.min(90, progress + 5);
+    document.getElementById('scanQBar').style.width = progress + '%';
+
+    try {
+      var r = await fetch(API_BASE + '/scan/' + scanId, {
+        headers: {'Authorization': 'Bearer ' + getToken()}
+      });
+      var scan = await r.json();
+      if(scan.status === 'completed') {
+        clearInterval(_scanPollInterval);
+        showScanResult(scan);
+      } else if(scan.status === 'failed') {
+        clearInterval(_scanPollInterval);
+        document.getElementById('scanProgressTxt').textContent = 'Error: ' + (scan.error_message || 'análisis fallido');
+      }
+    } catch(e) {}
+
+    if(attempts > 30) { clearInterval(_scanPollInterval); }
+  }, 2000);
+}
+
+function showScanResult(scan) {
+  document.getElementById('scanProgress').classList.remove('show');
+  document.getElementById('scanResult').classList.add('show');
+  document.getElementById('scanCardLabel').textContent = 'PLOTR · ANÁLISIS 3D · Completado';
+  document.getElementById('srArea').textContent = scan.estimated_area_m2 > 0 ? scan.estimated_area_m2 : '—';
+  document.getElementById('srSlope').textContent = scan.slope_percentage !== null ? scan.slope_percentage : '—';
+  document.getElementById('srQuality').textContent = scan.scan_quality_score !== null ? scan.scan_quality_score : '—';
+  var typeMap = {plano:'Plano',pendiente_suave:'Pendiente suave',pendiente_moderada:'Pendiente moderada',pendiente_pronunciada:'Pendiente pronunciada',indeterminado:'—'};
+  document.getElementById('srType').textContent = typeMap[scan.terrain_type] || scan.terrain_type || '—';
+  document.getElementById('srFoundation').textContent = scan.recommended_foundation || '—';
+  if(scan.point_cloud && scan.point_cloud.length > 0) renderPointCloud(scan.point_cloud);
+}
+
+function renderPointCloud(pts) {
+  var cv = document.getElementById('scanCanvas');
+  var ctx = cv.getContext('2d');
+  cv.width = cv.offsetWidth || 400;
+  cv.height = cv.offsetHeight || 190;
+  var W = cv.width, H = cv.height;
+  ctx.fillStyle = 'rgba(7,20,40,0.95)';
+  ctx.fillRect(0,0,W,H);
+
+  if(!pts || !pts.length) return;
+  var xs = pts.map(function(p){return p[0];}), ys = pts.map(function(p){return p[1];}), zs = pts.map(function(p){return p[2];});
+  var minX=Math.min.apply(null,xs), maxX=Math.max.apply(null,xs);
+  var minY=Math.min.apply(null,ys), maxY=Math.max.apply(null,ys);
+  var minZ=Math.min.apply(null,zs), maxZ=Math.max.apply(null,zs);
+  var rangeX=maxX-minX||1, rangeY=maxY-minY||1, rangeZ=maxZ-minZ||1;
+  var ry = 0.5;
+
+  function project3d(x,y,z) {
+    var cx2=Math.cos(ry), sx2=Math.sin(ry);
+    var px=x*cx2-z*sx2, pz=x*sx2+z*cx2;
+    var fov=300, d=fov/(fov+pz+200);
+    return {x:W/2+px*d*80, y:H*0.55+y*d*80};
+  }
+
+  pts.forEach(function(p) {
+    var nx=(p[0]-minX)/rangeX*2-1, ny=(p[1]-minY)/rangeY*2-1, nz=(p[2]-minZ)/rangeZ*2-1;
+    var pr=project3d(nx,ny,nz);
+    var heat=Math.floor(((p[2]-minZ)/rangeZ)*255);
+    ctx.fillStyle='rgba('+Math.floor(37+heat*0.5)+','+(99+Math.floor(heat*0.35))+','+Math.floor(184+heat*0.28)+',0.7)';
+    ctx.fillRect(pr.x,pr.y,2,2);
+  });
+
+  ctx.font='9px DM Mono, monospace'; ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.textAlign='left';
+  ctx.fillText(pts.length+' puntos · rotá con el mouse', 10, H-10);
+
+  var drag=false, lx=0;
+  cv.onmousedown=function(e){drag=true;lx=e.clientX;};
+  window.onmouseup=function(){drag=false;};
+  cv.onmousemove=function(e){
+    if(!drag) return;
+    ry+=(e.clientX-lx)*0.01; lx=e.clientX;
+    ctx.fillStyle='rgba(7,20,40,0.95)'; ctx.fillRect(0,0,W,H);
+    pts.forEach(function(p){
+      var nx=(p[0]-minX)/rangeX*2-1, ny=(p[1]-minY)/rangeY*2-1, nz=(p[2]-minZ)/rangeZ*2-1;
+      var pr=project3d(nx,ny,nz);
+      var heat=Math.floor(((p[2]-minZ)/rangeZ)*255);
+      ctx.fillStyle='rgba('+Math.floor(37+heat*0.5)+','+(99+Math.floor(heat*0.35))+','+Math.floor(184+heat*0.28)+',0.7)';
+      ctx.fillRect(pr.x,pr.y,2,2);
+    });
+  };
+}
+
+// ── PUBLISH MODAL — MEDIA HANDLING ───────────────────────────────────────────
+var _pubPhotos = [], _pubVideos = [];
+
+function handleMediaFiles(input, type) {
+  var files = Array.from(input.files);
+  var preview = document.getElementById('pub-' + type + '-preview');
+  var zone = document.getElementById('pub-' + type + '-zone');
+  var badge = document.getElementById('pub-' + type + '-badge');
+  if(type === 'photo') _pubPhotos = files; else _pubVideos = files;
+  preview.innerHTML = '';
+  files.forEach(function(f) {
+    var item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:8px;background:var(--off);border-radius:6px;padding:7px 10px;font-size:11px;color:var(--text-mid);font-family:var(--ff-m);border:1px solid var(--border);';
+    var icon = type === 'photo' ? '🖼' : '🎥';
+    item.innerHTML = icon + ' ' + f.name.substring(0,28) + (f.name.length>28?'…':'') + ' <span style="color:var(--text-xlight);margin-left:auto;">' + (f.size/1024/1024).toFixed(1) + ' MB</span>';
+    preview.appendChild(item);
+  });
+  if(files.length > 0) {
+    zone.classList.remove('required'); zone.classList.add('has-files');
+    badge.textContent = files.length + ' archivo' + (files.length>1?'s':'');
+    badge.classList.add('ok');
+  }
+}
+
+// ── PUBLISH MODAL — SUBMIT ────────────────────────────────────────────────────
+async function submitPublish() {
+  var errEl = document.getElementById('pub-submit-err');
+  var btn   = document.getElementById('pub-submit-btn');
+  errEl.style.display = 'none';
+
+  if(!isLoggedIn()) {
+    openAuth('login', function(){ submitPublish(); });
+    return;
+  }
+
+  // Validate required fields
+  var dirs = document.getElementById('pDireccion').value.trim();
+  var barrio = document.getElementById('pBarrio').value.trim();
+  var sup = parseFloat(document.getElementById('pSuperficie').value);
+  var precio = parseFloat(document.getElementById('pPrecio').value);
+  var nombre = document.getElementById('pNombre').value.trim();
+  var email = document.getElementById('pEmail').value.trim();
+  var tel = document.getElementById('pTelefono').value.trim();
+  var desc = document.getElementById('pDescripcion').value.trim();
+
+  if(!dirs||!barrio||!nombre||!email||!tel||!desc||!sup||!precio) {
+    errEl.textContent = '⚠ Completá todos los campos obligatorios (marcados con *).';
+    errEl.style.display = 'block'; return;
+  }
+  if(_pubPhotos.length === 0) {
+    errEl.textContent = '⚠ Debés subir al menos una foto del terreno.';
+    errEl.style.display = 'block'; return;
+  }
+  if(_pubVideos.length === 0) {
+    errEl.textContent = '⚠ Debés subir al menos un video del terreno.';
+    errEl.style.display = 'block'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Publicando...';
+
+  var fd = new FormData();
+  fd.append('direccion', dirs);
+  fd.append('barrio', barrio);
+  fd.append('superficie_m2', sup);
+  fd.append('precio_usd', precio);
+  fd.append('tipo_terreno', 'baldío');
+  fd.append('uso_suelo', 'residencial');
+  fd.append('descripcion', desc);
+  fd.append('nombre_contacto', nombre);
+  fd.append('email_contacto', email);
+  fd.append('telefono_contacto', tel);
+  _pubPhotos.forEach(function(f){ fd.append('fotos', f); });
+  _pubVideos.forEach(function(f){ fd.append('videos', f); });
+  var docFiles = document.getElementById('pub-file-input').files;
+  for(var i=0;i<docFiles.length;i++) fd.append('documentos', docFiles[i]);
+
+  try {
+    var r = await fetch(API_BASE + '/listings/', {
+      method: 'POST',
+      headers: {'Authorization': 'Bearer ' + getToken()},
+      body: fd
+    });
+    var d = await r.json();
+    if(!r.ok) {
+      errEl.textContent = '⚠ ' + (d.detail || 'Error al publicar.');
+      errEl.style.display = 'block'; return;
+    }
+    // Success
+    document.getElementById('pub-form-wrap').style.display = 'none';
+    document.getElementById('pub-success').style.display = 'block';
+    document.getElementById('pub-success').querySelector('.pub-success-desc').innerHTML =
+      'Tu terreno fue publicado exitosamente en la plataforma Plotr.<br><br>' +
+      '<span style="font-family:var(--ff-m);font-size:12px;color:var(--text-xlight);">ID de publicación: PLT-' + d.id + '</span>';
+    _pubPhotos = []; _pubVideos = [];
+  } catch(e) {
+    errEl.textContent = '⚠ No se pudo conectar con el servidor.';
+    errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Publicar terreno →';
+  }
+}
+
+// ── CAPITAL MATCHER — conectado al API con fallback local ─────────────────────
+async function runCapMatch() {
+  var capital = parseInt(document.getElementById('capRange').value);
+  var tipo    = document.getElementById('capTipo').value;
+  var zona    = document.getElementById('capZona').value;
+  var m2Min   = parseFloat(document.getElementById('capM2').value) || 0;
+
+  document.getElementById('capResults').classList.remove('show');
+  document.getElementById('capLoading').classList.add('show');
+
+  try {
+    var body = { capital_usd: capital, tolerance_pct: 0.4 };
+    if(tipo !== 'todos') body.uso_suelo = tipo;
+    if(m2Min > 0) body.superficie_min_m2 = m2Min;
+    if(zona !== 'todas') body.barrios = [zona.replace('caba','CABA').replace('gba-norte','GBA Norte').replace('gba-sur','GBA Sur').replace('gba-oeste','GBA Oeste')];
+
+    var r = await fetch(API_BASE + '/capital-matcher/', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    var results = await r.json();
+
+    document.getElementById('capLoading').classList.remove('show');
+    document.getElementById('capResTitle').textContent = results.length + ' terreno' + (results.length!==1?'s':'') + ' compatible' + (results.length!==1?'s':'') + ' encontrado' + (results.length!==1?'s':'');
+    document.getElementById('capResSub').textContent = 'Desde base de datos Plotr · ' + formatUSD(capital) + ' disponibles';
+
+    var grid = document.getElementById('capResGrid');
+    grid.innerHTML = '';
+    if(results.length === 0) {
+      grid.innerHTML = '<div class="cap-no-results"><div class="cap-no-icon">🔍</div><div>No se encontraron terrenos con estos criterios.<br>Probá ampliando el presupuesto o cambiando la zona.</div></div>';
+    } else {
+      results.slice(0,4).forEach(function(r, i) {
+        var t = r.listing, isTop = i===0;
+        var card = document.createElement('div');
+        card.className = 'cap-card' + (isTop?' top':'');
+        card.innerHTML =
+          '<div class="cap-card-head">'+
+            '<span class="cap-card-match">'+r.compatibility_score+'% compatible</span>'+
+            '<span class="cap-card-rank">'+(isTop?'✦ Mejor opción':'#'+(i+1))+'</span>'+
+          '</div>'+
+          '<div class="cap-card-body">'+
+            '<div class="cap-card-addr">'+t.direccion+'</div>'+
+            '<div class="cap-card-zone">'+t.barrio+' · '+t.localidad+'</div>'+
+            '<div class="cap-card-specs">'+
+              '<div class="cap-card-sp"><div class="cap-sp-l">Superficie</div><div class="cap-sp-v">'+t.superficie_m2+' m²</div></div>'+
+              '<div class="cap-card-sp"><div class="cap-sp-l">FOT</div><div class="cap-sp-v">'+(t.fot||'—')+'</div></div>'+
+            '</div>'+
+          '</div>'+
+          '<div class="cap-card-footer">'+
+            '<div><div class="cap-card-price">'+formatUSD(t.precio_usd)+'</div></div>'+
+            '<button class="cap-view-btn">Ver terreno</button>'+
+          '</div>';
+        grid.appendChild(card);
+      });
+    }
+    document.getElementById('capResults').classList.add('show');
+    document.getElementById('capResults').scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(e) {
+    // API not available yet — run local fallback
+    runCapMatchLocal(capital, tipo, zona, m2Min);
+  }
+}
+
+// SCROLL REVEAL
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+// ── 3D CANVAS ──
+(function(){
+  const cv = document.getElementById('hero-canvas');
+  if(!cv) return;
+  const cx = cv.getContext('2d');
+  let W = 0, H = 0;
+
+  function resize() {
+    W = cv.width = cv.offsetWidth || 400;
+    H = cv.height = cv.offsetHeight || 240;
+  }
+  resize();
+  new ResizeObserver(resize).observe(cv);
+
+  let ry = 0.5, rx = -0.15, drag = false, lx = 0, ly = 0;
+  cv.addEventListener('mousedown', e => { drag=true; lx=e.clientX; ly=e.clientY; });
+  window.addEventListener('mouseup', () => { drag=false; });
+  window.addEventListener('mousemove', e => {
+    if(!drag) return;
+    ry += (e.clientX - lx) * 0.007;
+    rx += (e.clientY - ly) * 0.003;
+    rx = Math.max(-0.4, Math.min(0.05, rx));
+    lx = e.clientX; ly = e.clientY;
+  });
+
+  function project(x, y, z) {
+    var cy2 = Math.cos(ry), sy2 = Math.sin(ry);
+    var cx2 = Math.cos(rx), sx2 = Math.sin(rx);
+    var x1 = x * cy2 - z * sy2;
+    var z1 = x * sy2 + z * cy2;
+    var y1 = y * cx2 - z1 * sx2;
+    var z2 = y * sx2 + z1 * cx2;
+    var fov = 340;
+    var d = fov / (fov + z2 + 220);
+    return { x: W/2 + x1*d, y: H*0.55 + y1*d };
+  }
+
+  function face(pts, fill, stroke) {
+    cx.beginPath();
+    cx.moveTo(pts[0].x, pts[0].y);
+    for(var i = 1; i < pts.length; i++) cx.lineTo(pts[i].x, pts[i].y);
+    cx.closePath();
+    if(fill) { cx.fillStyle = fill; cx.fill(); }
+    if(stroke) { cx.strokeStyle = stroke; cx.lineWidth = 0.6; cx.stroke(); }
+  }
+
+  function building(bx, bz, bw, bd, bh, c1, c2, c3) {
+    // 8 corners: 0-3 bottom, 4-7 top
+    var btm = bh/2, top2 = -bh/2;
+    var pts = [
+      project(bx,    btm, bz),      // 0
+      project(bx+bw, btm, bz),      // 1
+      project(bx+bw, btm, bz+bd),   // 2
+      project(bx,    btm, bz+bd),   // 3
+      project(bx,    top2, bz),     // 4
+      project(bx+bw, top2, bz),     // 5
+      project(bx+bw, top2, bz+bd),  // 6
+      project(bx,    top2, bz+bd),  // 7
+    ];
+    // front face (bz side)
+    face([pts[0],pts[1],pts[5],pts[4]], c1, 'rgba(255,255,255,0.07)');
+    // right face
+    face([pts[1],pts[2],pts[6],pts[5]], c2, 'rgba(255,255,255,0.07)');
+    // top face
+    face([pts[4],pts[5],pts[6],pts[7]], c3, 'rgba(255,255,255,0.1)');
+    // windows on front
+    cx.fillStyle = 'rgba(255,255,255,0.07)';
+    var floors = Math.floor(bh / 16);
+    for(var f = 0; f < floors; f++) {
+      var py = project(bx + bw*0.2, top2 + bh*(f+0.3)/floors, bz);
+      var py2 = project(bx + bw*0.7, top2 + bh*(f+0.3)/floors, bz);
+      cx.fillRect(py.x, py.y, 4, 3);
+      cx.fillRect(py2.x, py2.y, 4, 3);
+    }
+  }
+
+  function drawScene() {
+    cx.clearRect(0, 0, W, H);
+
+    // Ground grid
+    cx.strokeStyle = 'rgba(255,255,255,0.04)';
+    cx.lineWidth = 0.5;
+    for(var i = -6; i <= 6; i++) {
+      var a = project(i*25, 0, -180);
+      var b = project(i*25, 0, 180);
+      cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke();
+      var c = project(-180, 0, i*25);
+      var d2 = project(180, 0, i*25);
+      cx.beginPath(); cx.moveTo(c.x, c.y); cx.lineTo(d2.x, d2.y); cx.stroke();
+    }
+
+    // Plot highlight
+    var gl = [
+      project(-38, 0, -52), project(38, 0, -52),
+      project(38, 0, 52),   project(-38, 0, 52)
+    ];
+    face(gl, 'rgba(37,99,184,0.1)', 'rgba(37,99,184,0.4)');
+
+    // Background buildings (smaller, dimmer)
+    building(-110, -75, 22, 18, 50, 'rgba(15,35,65,0.8)', 'rgba(12,28,52,0.8)', 'rgba(18,42,78,0.7)');
+    building(75, -85, 18, 16, 38, 'rgba(15,35,65,0.7)', 'rgba(12,28,52,0.7)', 'rgba(18,42,78,0.6)');
+    building(-82, -55, 16, 14, 30, 'rgba(15,35,65,0.6)', 'rgba(12,28,52,0.6)', 'rgba(18,42,78,0.5)');
+    building(90, -50, 20, 15, 44, 'rgba(15,35,65,0.6)', 'rgba(12,28,52,0.6)', 'rgba(18,42,78,0.5)');
+
+    // MAIN BUILDING
+    building(-38, -52, 76, 104, 145,
+      'rgba(26,74,138,0.92)',
+      'rgba(20,58,110,0.92)',
+      'rgba(37,99,184,0.95)'
+    );
+
+    // Label above building
+    var lp = project(0, -83, 0);
+    cx.fillStyle = 'rgba(7,20,40,0.9)';
+    cx.strokeStyle = 'rgba(37,99,184,0.5)';
+    cx.lineWidth = 0.8;
+    var lw2 = 108, lh2 = 20;
+    cx.beginPath();
+    cx.roundRect(lp.x - lw2/2, lp.y - lh2 - 6, lw2, lh2, 3);
+    cx.fill();
+    cx.stroke();
+    cx.fillStyle = 'rgba(255,255,255,0.65)';
+    cx.font = '500 10px "DM Mono", monospace';
+    cx.textAlign = 'center';
+    cx.fillText('14 pisos · FOT 5.1 · Belgrano', lp.x, lp.y - 12);
+  }
+
+  function loop() {
+    if(!drag) ry += 0.003;
+    drawScene();
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+// MINI MAPS
+function drawMiniMap(cv) {
+  var ctx = cv.getContext('2d');
+  var w = cv.width = cv.offsetWidth || 300;
+  var h = cv.height = 120;
+  ctx.fillStyle = '#071428'; ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = '#0c1d35'; ctx.lineWidth = 0.5;
+  for(var i = 0; i < w; i += 20) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,h); ctx.stroke(); }
+  for(var j = 0; j < h; j += 20) { ctx.beginPath(); ctx.moveTo(0,j); ctx.lineTo(w,j); ctx.stroke(); }
+  [[0.04,0.08,0.13,0.78],[0.22,0.05,0.10,0.82],[0.65,0.07,0.11,0.76],[0.82,0.10,0.09,0.62],[0.90,0.05,0.07,0.72]].forEach(function(b) {
+    ctx.fillStyle='#0d2040'; ctx.fillRect(b[0]*w,b[1]*h,b[2]*w,b[3]*h);
+    ctx.strokeStyle='#1a3060'; ctx.lineWidth=0.5; ctx.strokeRect(b[0]*w,b[1]*h,b[2]*w,b[3]*h);
+  });
+  ctx.fillStyle = 'rgba(37,99,184,0.18)'; ctx.fillRect(0.33*w, 0.12*h, 0.24*w, 0.74*h);
+  ctx.strokeStyle = 'rgba(37,99,184,0.65)'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(0.33*w, 0.12*h, 0.24*w, 0.74*h);
+}
+
+// TERRENOS
+var terrenos = [
+  {addr:'Av. Corrientes 4850',barrio:'Almagro · CABA',m2:320,pisos:12,fot:4.5,sub:2,uso:'Residencial / Comercial mixto',riesgo:'Bajo',napa:'6.2 m',suelo:'Limo arcilloso consolidado',cocheras:'Viable hasta 2 subsuelos',prop:'Particular',src:'API CABA',tags:['ok','ok','neu'],tl:['Baldío verificado','Subsuelo viable','Sin afectaciones']},
+  {addr:'Rivadavia 8200',barrio:'Flores · CABA',m2:480,pisos:8,fot:3.2,sub:1,uso:'Residencial predominante',riesgo:'Medio',napa:'4.1 m',suelo:'Arena fina con nivel freático',cocheras:'Viable con drenaje activo',prop:'Empresa',src:'API CABA',tags:['ok','warn','neu'],tl:['Baldío verificado','Riesgo hídrico medio','Drenaje recomendado']},
+  {addr:'Calchaquí 3100',barrio:'Quilmes · GBA Sur',m2:1200,pisos:5,fot:2.8,sub:1,uso:'Comercial / Industrial liviano',riesgo:'Bajo',napa:'8.5 m',suelo:'Tosca compacta — suelo firme',cocheras:'Viable hasta 1 subsuelo',prop:'Particular',src:'CARTO ARBA',tags:['ok','ok','ok'],tl:['Baldío verificado','Suelo firme','Napa profunda']},
+  {addr:'Monroe 3400',barrio:'Belgrano · CABA',m2:290,pisos:14,fot:5.1,sub:2,uso:'Residencial con PB comercial',riesgo:'Bajo',napa:'7.8 m',suelo:'Limo consolidado — alta densidad',cocheras:'Viable hasta 2 subsuelos',prop:'Particular',src:'API CABA',tags:['ok','ok','ok'],tl:['Baldío verificado','Alta edificabilidad','Zona premium']},
+  {addr:'Av. San Martín 2800',barrio:'Villa del Parque · CABA',m2:560,pisos:7,fot:3.0,sub:1,uso:'Mixto residencial / equipamiento',riesgo:'Bajo',napa:'5.9 m',suelo:'Limo arcilloso — estudio sugerido',cocheras:'Viable con estudio previo',prop:'Sucesión',src:'API CABA',tags:['ok','neu','warn'],tl:['Baldío verificado','Estudio recomendado','Sucesión en trámite']},
+  {addr:'Pres. Perón 1450',barrio:'San Isidro · GBA Norte',m2:800,pisos:6,fot:2.4,sub:1,uso:'Residencial baja/media densidad',riesgo:'Bajo',napa:'9.2 m',suelo:'Tosca compacta — suelo óptimo',cocheras:'Viable hasta 1 subsuelo',prop:'Particular',src:'CARTO ARBA',tags:['ok','ok','ok'],tl:['Baldío verificado','Suelo óptimo','GBA premium']},
+];
+
+function renderTerrenos() {
+  var grid = document.getElementById('t-grid');
+  grid.innerHTML = '';
+  terrenos.forEach(function(t, i) {
+    var d = document.createElement('div');
+    d.className = 'tc reveal';
+    d.innerHTML =
+      '<div class="tc-map"><canvas id="mc'+i+'"></canvas><div class="tc-badge">Baldío verificado</div></div>'+
+      '<div class="tc-body">'+
+        '<div class="tc-addr">'+t.addr+'</div>'+
+        '<div class="tc-barrio">'+t.barrio+'</div>'+
+        '<div class="tc-specs">'+
+          '<div class="tc-sp"><div class="tsl">Superficie</div><div class="tsv">'+t.m2+' m²</div></div>'+
+          '<div class="tc-sp"><div class="tsl">Alt. máx.</div><div class="tsv">'+t.pisos+' pisos</div></div>'+
+          '<div class="tc-sp"><div class="tsl">FOT</div><div class="tsv">'+t.fot+'</div></div>'+
+          '<div class="tc-sp"><div class="tsl">Subsuelos</div><div class="tsv">'+t.sub+' nivel'+(t.sub>1?'es':'')+'</div></div>'+
+        '</div>'+
+        '<div class="tc-tags">'+t.tags.map(function(c,j){return '<span class="tt '+c+'">'+t.tl[j]+'</span>';}).join('')+'</div>'+
+        '<div class="tc-foot">'+
+          '<span class="tc-own">'+t.prop+' · sin intermediarios</span>'+
+          '<button class="tc-btn" onclick="openModal('+i+')">Ver ficha técnica</button>'+
+        '</div>'+
+      '</div>';
+    grid.appendChild(d);
+    ro.observe(d);
+    setTimeout(function() {
+      var c = document.getElementById('mc'+i);
+      if(c) drawMiniMap(c);
+    }, 80);
+  });
+}
+
+function openModal(i) {
+  var t = terrenos[i];
+  document.getElementById('modal-title').textContent = t.addr + ' — Ficha técnica';
+  document.getElementById('modal-body').innerHTML =
+    '<div class="ds"><h4>Datos normativos</h4><div class="dg">'+
+      '<div class="di"><div class="dil">Altura máxima permitida</div><div class="div2">'+t.pisos+' pisos</div><div class="dis">Código Urbanístico CABA</div></div>'+
+      '<div class="di"><div class="dil">Factor de Ocupación Total</div><div class="div2">FOT '+t.fot+'</div><div class="dis">Ciudad 3D GCBA</div></div>'+
+      '<div class="di"><div class="dil">Subsuelos permitidos</div><div class="div2">'+t.sub+' nivel'+(t.sub>1?'es':'')+'</div><div class="dis">CUR Art. 6.6</div></div>'+
+      '<div class="di"><div class="dil">Uso del suelo</div><div class="div2" style="font-size:12px">'+t.uso+'</div><div class="dis">Código Urbanístico</div></div>'+
+    '</div></div>'+
+    '<div class="ds"><h4>Análisis geotécnico</h4><div class="dg">'+
+      '<div class="di"><div class="dil">Profundidad napa freática</div><div class="div2">'+t.napa+'</div><div class="dis">Mapeo Subsuelo GCBA</div></div>'+
+      '<div class="di"><div class="dil">Tipo de suelo</div><div class="div2" style="font-size:12px">'+t.suelo+'</div><div class="dis">SEGEMAR / Georadar</div></div>'+
+      '<div class="di"><div class="dil">Viabilidad de cocheras</div><div class="div2" style="font-size:12px">'+t.cocheras+'</div><div class="dis">Análisis Plotr</div></div>'+
+      '<div class="di"><div class="dil">Riesgo hídrico</div><div class="div2" style="color:'+(t.riesgo==='Bajo'?'#22a060':t.riesgo==='Medio'?'#d4940a':'#c04040')+'">'+t.riesgo+'</div><div class="dis">Ciudad 3D GCBA</div></div>'+
+    '</div></div>'+
+    '<div class="ds" style="margin-bottom:0"><h4>Estado catastral</h4><div class="dg">'+
+      '<div class="di"><div class="dil">Estado del lote</div><div class="div2" style="color:#22a060">Baldío confirmado</div><div class="dis">'+t.src+'</div></div>'+
+      '<div class="di"><div class="dil">Titularidad</div><div class="div2" style="font-size:12px">'+t.prop+'</div><div class="dis">Sin intermediarios</div></div>'+
+    '</div></div>';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function closeModalOutside(e) { if(e.target === document.getElementById('modal-overlay')) closeModal(); }
+function setTipo(el) { document.querySelectorAll('.tipo-card').forEach(function(u){u.classList.remove('active');}); el.classList.add('active'); }
+
+renderTerrenos();
+
+// ── CAPITAL MATCHER ──
+function formatUSD(val) {
+  val = parseInt(val);
+  if(val >= 1000000) return 'USD ' + (val/1000000).toFixed(val%1000000===0?0:1) + '.000.000';
+  return 'USD ' + val.toLocaleString('es-AR').replace(/\./g, '.');
+}
+
+function updateCapVal(v) {
+  document.getElementById('capValDisplay').textContent = formatUSD(v);
+}
+
+function toggleCapTag(el) {
+  el.classList.toggle('sel');
+}
+
+function resetCapMatch() {
+  document.getElementById('capResults').classList.remove('show');
+  document.getElementById('capLoading').classList.remove('show');
+}
+
+function runCapMatchLocal(capital, tipo, zona, m2Min) {
+  var prios = Array.from(document.querySelectorAll('.cap-tag.sel')).map(function(t){ return t.textContent.trim(); });
+
+  // Show loading
+  document.getElementById('capResults').classList.remove('show');
+  document.getElementById('capLoading').classList.add('show');
+
+  setTimeout(function() {
+    document.getElementById('capLoading').classList.remove('show');
+
+    // Score each terreno
+    var results = terrenos.map(function(t) {
+      var score = 0;
+      var reasons = [];
+
+      // Capital fit (price range ±40%)
+      var price = t.price_usd || estimatePrice(t);
+      var ratio = price / capital;
+      if(ratio <= 1.0) { score += 40; reasons.push('Precio dentro de tu presupuesto'); }
+      else if(ratio <= 1.15) { score += 25; reasons.push('Precio levemente por encima del presupuesto'); }
+      else if(ratio <= 1.3) { score += 10; }
+      else { score -= 10; }
+
+      // M2 min
+      if(t.m2 >= m2Min) { score += 10; if(m2Min > 0) reasons.push('Superficie mínima cumplida ('+t.m2+' m²)'); }
+      else { score -= 15; }
+
+      // Tipo match
+      if(tipo !== 'todos') {
+        var usoLow = t.uso.toLowerCase();
+        if(tipo === 'residencial' && usoLow.includes('residencial')) { score += 20; reasons.push('Uso compatible: ' + t.uso); }
+        else if(tipo === 'comercial' && usoLow.includes('comercial')) { score += 20; reasons.push('Uso compatible: ' + t.uso); }
+        else if(tipo === 'mixto' && usoLow.includes('mixto')) { score += 20; reasons.push('Uso compatible: ' + t.uso); }
+        else if(tipo === 'industrial' && usoLow.includes('industrial')) { score += 20; reasons.push('Uso compatible: ' + t.uso); }
+        else { score -= 5; }
+      }
+
+      // Zona match
+      if(zona !== 'todas') {
+        var barrioLow = t.barrio.toLowerCase();
+        if(zona === 'caba' && barrioLow.includes('caba')) { score += 15; }
+        else if(zona === 'gba-norte' && barrioLow.includes('gba norte')) { score += 15; }
+        else if(zona === 'gba-sur' && barrioLow.includes('gba sur')) { score += 15; }
+        else { score -= 10; }
+      }
+
+      // Priority tags
+      prios.forEach(function(p) {
+        if(p === 'Alta edificabilidad' && t.fot >= 4.0) { score += 8; reasons.push('FOT ' + t.fot + ' — alta edificabilidad'); }
+        if(p === 'Napa profunda') { var n = parseFloat(t.napa); if(n >= 7) { score += 8; reasons.push('Napa a ' + t.napa + ' de profundidad'); } }
+        if(p === 'Subsuelos viables' && t.sub >= 2) { score += 8; reasons.push(t.sub + ' subsuelos permitidos'); }
+        if(p === 'Bajo riesgo hídrico' && t.riesgo === 'Bajo') { score += 8; reasons.push('Riesgo hídrico: Bajo'); }
+        if(p === 'Zona premium' && (t.barrio.includes('Belgrano') || t.barrio.includes('San Isidro') || t.barrio.includes('Palermo'))) { score += 8; reasons.push('Ubicación en zona premium'); }
+        if(p === 'Sin intermediarios' && t.prop === 'Particular') { score += 6; reasons.push('Trato directo con el propietario'); }
+        if(p === 'Gran superficie' && t.m2 >= 500) { score += 8; reasons.push('Superficie amplia: ' + t.m2 + ' m²'); }
+        if(p === 'Documentación completa' && t.tags[0] === 'ok') { score += 6; reasons.push('Documentación catastral verificada'); }
+      });
+
+      return { t: t, score: Math.min(99, Math.max(0, score)), reasons: reasons.slice(0, 3), price: price };
+    });
+
+    // Sort by score
+    results.sort(function(a, b) { return b.score - a.score; });
+    var top = results.filter(function(r) { return r.score > 0; }).slice(0, 4);
+
+    document.getElementById('capResTitle').textContent = top.length + ' terreno' + (top.length !== 1 ? 's' : '') + ' compatible' + (top.length !== 1 ? 's' : '') + ' encontrado' + (top.length !== 1 ? 's' : '');
+    document.getElementById('capResSub').textContent = 'Ordenados por compatibilidad con tu capital y criterios · ' + formatUSD(capital) + ' disponibles';
+
+    var grid = document.getElementById('capResGrid');
+    grid.innerHTML = '';
+
+    if(top.length === 0) {
+      grid.innerHTML = '<div class="cap-no-results"><div class="cap-no-icon">🔍</div><div>No se encontraron terrenos con los criterios ingresados.<br>Probá ampliando el capital o cambiando la zona.</div></div>';
+    } else {
+      top.forEach(function(r, i) {
+        var t = r.t;
+        var isTop = i === 0;
+        var matchPct = r.score;
+        var card = document.createElement('div');
+        card.className = 'cap-card' + (isTop ? ' top' : '');
+        card.innerHTML =
+          '<div class="cap-card-head">'+
+            '<span class="cap-card-match">'+matchPct+'% compatible</span>'+
+            '<span class="cap-card-rank">'+(isTop?'✦ Mejor opción':'#'+(i+1))+'</span>'+
+          '</div>'+
+          '<div class="cap-card-body">'+
+            '<div class="cap-card-addr">'+t.addr+'</div>'+
+            '<div class="cap-card-zone">'+t.barrio+'</div>'+
+            '<div class="cap-card-specs">'+
+              '<div class="cap-card-sp"><div class="cap-sp-l">Superficie</div><div class="cap-sp-v">'+t.m2+' m²</div></div>'+
+              '<div class="cap-card-sp"><div class="cap-sp-l">FOT</div><div class="cap-sp-v">'+t.fot+'</div></div>'+
+              '<div class="cap-card-sp"><div class="cap-sp-l">Altura máx.</div><div class="cap-sp-v">'+t.pisos+' pisos</div></div>'+
+              '<div class="cap-card-sp"><div class="cap-sp-l">Riesgo hídrico</div><div class="cap-sp-v" style="color:'+(t.riesgo==='Bajo'?'#22a060':'#d4940a')+'">'+t.riesgo+'</div></div>'+
+            '</div>'+
+            '<div class="cap-card-reasons">'+
+              r.reasons.map(function(rs){ return '<div class="cap-reason"><span class="cap-reason-icon">✓</span>'+rs+'</div>'; }).join('')+
+            '</div>'+
+          '</div>'+
+          '<div class="cap-card-footer">'+
+            '<div><div class="cap-card-price">'+formatUSD(r.price)+'</div><div class="cap-card-inc">Precio estimado</div></div>'+
+            '<button class="cap-view-btn" onclick="openModal('+terrenos.indexOf(t)+')">Ver ficha técnica</button>'+
+          '</div>';
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('capResults').classList.add('show');
+    document.getElementById('capResults').scrollIntoView({behavior:'smooth', block:'start'});
+  }, 1200);
+}
+
+function estimatePrice(t) {
+  // Rough price estimate based on m2, zone and FOT
+  var base = 800; // USD/m2 base
+  if(t.barrio.includes('Belgrano') || t.barrio.includes('Palermo')) base = 1400;
+  else if(t.barrio.includes('CABA') || t.barrio.includes('Almagro') || t.barrio.includes('Flores') || t.barrio.includes('Villa del Parque')) base = 1000;
+  else if(t.barrio.includes('GBA Norte') || t.barrio.includes('San Isidro')) base = 900;
+  else if(t.barrio.includes('GBA Sur') || t.barrio.includes('Quilmes')) base = 600;
+  base *= (1 + (t.fot - 3) * 0.1);
+  return Math.round(t.m2 * base / 10000) * 10000;
+}
+
+
+// PUBLISH MODAL
+function openPublish(){
+  document.getElementById('pub-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('pub-form-wrap').style.display='block';
+  document.getElementById('pub-success').style.display='none';
+  document.getElementById('pub-submit-err').style.display='none';
+}
+function closePublish(){
+  document.getElementById('pub-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closePubOutside(e){
+  if(e.target===document.getElementById('pub-overlay')) closePublish();
+}
+function toggleTag(el){ el.classList.toggle('selected'); }
+function handleFiles(input){
+  var list = document.getElementById('pub-file-list');
+  Array.from(input.files).forEach(function(f){
+    var item = document.createElement('div');
+    item.style.cssText='display:flex;align-items:center;gap:8px;background:var(--off);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--text-mid);font-family:var(--ff-m);border:1px solid var(--border);';
+    item.innerHTML='📄 '+f.name+' <span style="color:var(--text-xlight);margin-left:auto;">'+(f.size/1024/1024).toFixed(1)+' MB</span>';
+    list.appendChild(item);
+  });
+}
+
+// Init on page load
+updateNavAuth();
+
+</script>
+
+<!-- PUBLISH MODAL -->
+<div class="pub-overlay" id="pub-overlay" onclick="closePubOutside(event)">
+  <div class="pub-modal" id="pub-modal">
+
+    <div id="pub-form-wrap">
+      <div class="pub-head">
+        <div class="pub-head-left">
+          <div class="pub-head-tag">Plotr · Base de datos</div>
+          <div class="pub-head-title">Publicar terreno</div>
+        </div>
+        <button class="pub-close" onclick="closePublish()">✕</button>
+      </div>
+
+      <div class="pub-body">
+
+        <!-- UBICACION -->
+        <div class="pub-section">
+          <div class="pub-section-title">Ubicación del lote</div>
+          <div class="pub-grid">
+            <div class="pub-field full">
+              <label class="pub-label">Dirección completa <span>*</span></label>
+              <input class="pub-inp" id="pDireccion" type="text" placeholder="Ej: Av. Corrientes 4850, CABA">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Barrio / Localidad <span>*</span></label>
+              <input class="pub-inp" id="pBarrio" type="text" placeholder="Ej: Almagro">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Zona</label>
+              <select class="pub-select">
+                <option value="">Seleccionar zona</option>
+                <option>CABA</option>
+                <option>GBA Norte</option>
+                <option>GBA Sur</option>
+                <option>GBA Oeste</option>
+                <option>Interior Buenos Aires</option>
+              </select>
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Nomenclatura catastral</label>
+              <input class="pub-inp" type="text" placeholder="Ej: Circ. I - Secc. 11 - Manz. 40">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Partida inmobiliaria</label>
+              <input class="pub-inp" type="text" placeholder="Ej: 123-456-789">
+            </div>
+          </div>
+        </div>
+
+        <!-- DATOS FISICOS -->
+        <div class="pub-section">
+          <div class="pub-section-title">Datos físicos del lote</div>
+          <div class="pub-grid-3">
+            <div class="pub-field">
+              <label class="pub-label">Superficie total (m²) <span>*</span></label>
+              <input class="pub-inp" id="pSuperficie" type="number" placeholder="320">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Frente (metros)</label>
+              <input class="pub-inp" type="number" placeholder="12">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Fondo (metros)</label>
+              <input class="pub-inp" type="number" placeholder="26">
+            </div>
+          </div>
+          <div class="pub-grid" style="margin-top:14px;">
+            <div class="pub-field">
+              <label class="pub-label">Uso del suelo</label>
+              <select class="pub-select">
+                <option value="">Seleccionar uso</option>
+                <option>Residencial predominante</option>
+                <option>Comercial</option>
+                <option>Mixto residencial / comercial</option>
+                <option>Industrial liviano</option>
+                <option>Equipamiento</option>
+              </select>
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Estado actual del lote</label>
+              <select class="pub-select">
+                <option value="">Seleccionar estado</option>
+                <option>Baldío libre</option>
+                <option>Con construcción a demoler</option>
+                <option>Con construcción a refaccionar</option>
+                <option>En proceso de demolición</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- DATOS NORMATIVOS -->
+        <div class="pub-section">
+          <div class="pub-section-title">Datos normativos conocidos (opcional)</div>
+          <div class="pub-grid-3">
+            <div class="pub-field">
+              <label class="pub-label">FOT</label>
+              <input class="pub-inp" type="number" step="0.1" placeholder="4.5">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Altura máx. (pisos)</label>
+              <input class="pub-inp" type="number" placeholder="12">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Subsuelos permitidos</label>
+              <input class="pub-inp" type="number" placeholder="2">
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--text-xlight);margin-top:10px;font-family:var(--ff-m);">Si no contás con estos datos, Plotr los verifica automáticamente en el Código Urbanístico CABA.</p>
+        </div>
+
+        <!-- CARACTERISTICAS -->
+        <div class="pub-section">
+          <div class="pub-section-title">Características destacadas</div>
+          <div class="pub-tags-wrap">
+            <label class="pub-tag-opt" onclick="toggleTag(this)"><input type="checkbox">🏗️ Apto para desarrollo residencial</label>
+            <label class="pub-tag-opt" onclick="toggleTag(this)"><input type="checkbox">🏢 Apto para desarrollo comercial</label>
+            <label class="pub-tag-opt" onclick="toggleTag(this)"><input type="checkbox">🔩 Subsuelo viable</label>
+            <label class="pub-tag-opt" onclick="toggleTag(this)"><input type="checkbox">💧 Napa profunda</label>
+            <label class="pub-tag-opt" onclick="toggleTag(this)"><input type="checkbox">📋 Documentación completa</label>
+            <label class="pub-tag-opt" onclick="toggleTag(this)"><input type="checkbox">⚡ Servicios habilitados</label>
+            <label class="pub-tag-opt" onclick="toggleTag(this)"><input type="checkbox">📍 Esquina</label>
+            <label class="pub-tag-opt" onclick="toggleTag(this)"><input type="checkbox">🛣️ Acceso vehicular directo</label>
+            <label class="pub-tag-opt" onclick="toggleTag(this)"><input type="checkbox">✅ Sin afectaciones</label>
+          </div>
+        </div>
+
+        <!-- DESCRIPCION -->
+        <div class="pub-section">
+          <div class="pub-section-title">Descripción técnica</div>
+          <div class="pub-field">
+            <label class="pub-label">Descripción del lote <span>*</span></label>
+            <textarea class="pub-textarea" id="pDescripcion" placeholder="Describí las condiciones actuales del terreno, características del suelo, entorno urbano, potencial de desarrollo, accesibilidad, servicios disponibles y cualquier dato relevante para el comprador o desarrollador..."></textarea>
+          </div>
+        </div>
+
+        <!-- PRECIO -->
+        <div class="pub-section">
+          <div class="pub-section-title">Condiciones comerciales</div>
+          <div class="pub-grid">
+            <div class="pub-field">
+              <label class="pub-label">Precio pedido (USD) <span>*</span></label>
+              <input class="pub-inp" id="pPrecio" type="number" placeholder="250000">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Modalidad de venta</label>
+              <select class="pub-select">
+                <option value="">Seleccionar</option>
+                <option>Venta directa</option>
+                <option>Permuta parcial</option>
+                <option>Permuta total</option>
+                <option>Licitación</option>
+                <option>A convenir</option>
+              </select>
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Titularidad</label>
+              <select class="pub-select">
+                <option value="">Seleccionar</option>
+                <option>Particular</option>
+                <option>Empresa</option>
+                <option>Sucesión</option>
+                <option>Fideicomiso</option>
+              </select>
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">¿Admite intermediarios?</label>
+              <select class="pub-select">
+                <option value="">Seleccionar</option>
+                <option>Sin intermediarios</option>
+                <option>Admite intermediarios</option>
+                <option>Solo con broker habilitado</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- DATOS DE CONTACTO -->
+        <div class="pub-section">
+          <div class="pub-section-title">Datos de contacto</div>
+          <div class="pub-grid">
+            <div class="pub-field">
+              <label class="pub-label">Nombre completo / Razón social <span>*</span></label>
+              <input class="pub-inp" id="pNombre" type="text" placeholder="Ej: Juan García o Desarrollos S.A.">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Correo electrónico <span>*</span></label>
+              <input class="pub-inp" id="pEmail" type="email" placeholder="contacto@empresa.com.ar">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Teléfono / WhatsApp <span>*</span></label>
+              <input class="pub-inp" id="pTelefono" type="tel" placeholder="+54 11 XXXX-XXXX">
+            </div>
+            <div class="pub-field">
+              <label class="pub-label">Sitio web o portfolio (opcional)</label>
+              <input class="pub-inp" type="url" placeholder="https://empresa.com.ar">
+            </div>
+          </div>
+        </div>
+
+        <!-- FOTOS — OBLIGATORIO -->
+        <div class="pub-section">
+          <div class="pub-section-title">Fotos del terreno <span style="color:#e05050;">*</span> — obligatorio</div>
+          <div class="pub-media-grid">
+            <div class="pub-media-zone required" id="pub-photo-zone" onclick="document.getElementById('pub-photo-input').click()">
+              <div class="pub-media-badge" id="pub-photo-badge">Requerido</div>
+              <div style="font-size:28px;margin-bottom:8px;">📸</div>
+              <div style="font-size:13px;color:var(--text-mid);margin-bottom:4px;font-weight:600;">Fotos del lote</div>
+              <div style="font-size:11px;color:var(--text-xlight);font-family:var(--ff-m);">JPG, PNG, WEBP · Máx. 20MB c/u · Mín. 1 foto</div>
+              <input type="file" id="pub-photo-input" multiple accept=".jpg,.jpeg,.png,.webp,.heic" style="display:none" onchange="handleMediaFiles(this,'photo')">
+            </div>
+            <div id="pub-photo-preview" style="display:flex;flex-direction:column;gap:6px;justify-content:flex-start;max-height:120px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- VIDEOS — OBLIGATORIO -->
+        <div class="pub-section">
+          <div class="pub-section-title">Videos del terreno <span style="color:#e05050;">*</span> — obligatorio</div>
+          <div class="pub-media-grid">
+            <div class="pub-media-zone required" id="pub-video-zone" onclick="document.getElementById('pub-video-input').click()">
+              <div class="pub-media-badge" id="pub-video-badge">Requerido</div>
+              <div style="font-size:28px;margin-bottom:8px;">🎥</div>
+              <div style="font-size:13px;color:var(--text-mid);margin-bottom:4px;font-weight:600;">Video del lote</div>
+              <div style="font-size:11px;color:var(--text-xlight);font-family:var(--ff-m);">MP4, MOV, AVI · Máx. 200MB · Mín. 1 video</div>
+              <input type="file" id="pub-video-input" multiple accept=".mp4,.mov,.avi,.webm,.mkv,.3gp" capture="environment" style="display:none" onchange="handleMediaFiles(this,'video')">
+            </div>
+            <div id="pub-video-preview" style="display:flex;flex-direction:column;gap:6px;justify-content:flex-start;max-height:120px;overflow-y:auto;"></div>
+          </div>
+          <p style="font-size:11px;color:var(--text-xlight);margin-top:10px;font-family:var(--ff-m);">💡 Tip: grabá un video caminando alrededor del terreno. En el celular se abre la cámara directamente.</p>
+        </div>
+
+        <!-- DOCUMENTACION (opcional) -->
+        <div class="pub-section" style="margin-bottom:0;">
+          <div class="pub-section-title">Documentación adjunta (opcional)</div>
+          <div class="pub-upload-area" onclick="document.getElementById('pub-file-input').click()">
+            <div class="pub-upload-icon">📎</div>
+            <div class="pub-upload-text">Arrastrá archivos o hacé clic para adjuntar</div>
+            <div class="pub-upload-sub">Planos, escrituras, informe de dominio · PDF · Máx. 20MB c/u</div>
+          </div>
+          <input type="file" id="pub-file-input" multiple accept=".pdf" style="display:none" onchange="handleFiles(this)">
+          <div id="pub-file-list" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;"></div>
+        </div>
+
+      </div>
+
+      <div class="pub-foot">
+        <span class="pub-note">Los campos con <span style="color:#e05050;">*</span> son obligatorios. Fotos y videos son requeridos.</span>
+        <div class="pub-foot-btns">
+          <button class="pub-cancel" onclick="closePublish()">Cancelar</button>
+          <button class="pub-submit" id="pub-submit-btn" onclick="submitPublish()">Publicar terreno →</button>
+        </div>
+      </div>
+      <div id="pub-submit-err" style="display:none;padding:10px 28px 14px;font-size:12px;color:#e05050;font-family:var(--ff-m);"></div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="pub-success" id="pub-success">
+      <div class="pub-success-icon">✅</div>
+      <div class="pub-success-title">Terreno enviado para revisión</div>
+      <div class="pub-success-desc">Recibimos los datos de tu lote. El equipo de Plotr verificará la información con fuentes oficiales y te contactará en un plazo de 48 horas hábiles para confirmar la publicación.<br><br>
+      <span style="font-family:var(--ff-m);font-size:12px;color:var(--text-xlight);">Número de referencia: PLT-2026-' + Math.floor(Math.random()*90000+10000) + '</span></div>
+      <button class="btn-navy" style="margin-top:24px;" onclick="closePublish()">Cerrar</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="auth-overlay" onclick="closeAuthOutside(event)">
+  <div class="auth-box">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <div class="auth-head">
+      <div class="auth-logo">Plotr<span style="color:var(--accent);">.</span></div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Ingresar</button>
+        <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Crear cuenta</button>
+      </div>
+    </div>
+    <div class="auth-body">
+      <div id="authLoginForm">
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <input class="auth-inp" type="email" id="loginEmail" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')submitLogin()">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Contraseña</label>
+          <input class="auth-inp" type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitLogin()">
+        </div>
+        <div class="auth-err" id="loginErr"></div>
+        <button class="auth-btn" id="loginBtn" onclick="submitLogin()">Ingresar</button>
+      </div>
+      <div id="authRegisterForm" style="display:none;">
+        <div class="auth-field">
+          <label class="auth-label">Nombre completo</label>
+          <input class="auth-inp" type="text" id="regNombre" placeholder="Juan García">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <input class="auth-inp" type="email" id="regEmail" placeholder="tu@email.com">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Contraseña</label>
+          <input class="auth-inp" type="password" id="regPassword" placeholder="Mínimo 6 caracteres" onkeydown="if(event.key==='Enter')submitRegister()">
+        </div>
+        <div class="auth-err" id="regErr"></div>
+        <button class="auth-btn" id="regBtn" onclick="submitRegister()">Crear cuenta gratis</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
