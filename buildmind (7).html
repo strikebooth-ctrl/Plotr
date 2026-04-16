@@ -227,6 +227,61 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
   .pricing-grid{grid-template-columns:1fr;}
 }
 
+/* AUTH MODAL */
+.auth-overlay{position:fixed;inset:0;z-index:700;background:rgba(7,20,40,0.82);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:24px;}
+.auth-overlay.open{display:flex;}
+.auth-box{background:#fff;border-radius:14px;max-width:420px;width:100%;box-shadow:0 40px 100px rgba(7,20,40,0.3);position:relative;}
+.auth-head{padding:28px 28px 0;}
+.auth-logo{font-family:var(--ff-d);font-size:20px;font-weight:600;color:var(--navy);margin-bottom:16px;}
+.auth-tabs{display:flex;border-bottom:1.5px solid var(--border);margin-bottom:0;}
+.auth-tab{font-size:13px;font-weight:600;padding:12px 20px;cursor:pointer;color:var(--text-light);border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--ff-b);}
+.auth-tab.active{color:var(--navy);border-bottom-color:var(--navy);}
+.auth-body{padding:24px 28px 28px;}
+.auth-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.auth-label{font-size:11px;font-weight:600;color:var(--text-mid);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.05em;}
+.auth-inp{font-size:14px;padding:11px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--off);color:var(--text);font-family:var(--ff-b);outline:none;transition:border-color 0.15s;width:100%;}
+.auth-inp:focus{border-color:var(--accent);background:#fff;}
+.auth-btn{width:100%;padding:13px;border-radius:8px;background:var(--navy);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--ff-b);transition:background 0.15s;margin-top:4px;}
+.auth-btn:hover{background:var(--navy-mid);}
+.auth-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.auth-err{font-size:12px;color:#e05050;font-family:var(--ff-m);min-height:16px;margin-bottom:8px;}
+.auth-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:6px;background:var(--cream);border:none;cursor:pointer;font-size:15px;color:var(--text-mid);}
+.nav-user{font-size:13px;font-weight:600;color:var(--navy);font-family:var(--ff-b);background:none;border:1px solid var(--border);padding:8px 14px;border-radius:6px;cursor:pointer;}
+
+/* SCAN SECTION */
+.scan-sec{padding:80px 48px;background:linear-gradient(160deg,var(--navy-deep) 0%,#0a1f40 100%);position:relative;overflow:hidden;}
+.scan-sec::before{content:'';position:absolute;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,184,0.18) 0%,transparent 70%);pointer-events:none;}
+.scan-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;}
+.scan-btn-main{display:inline-flex;align-items:center;gap:12px;background:#fff;color:var(--navy);padding:15px 30px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:var(--ff-b);transition:all 0.18s;box-shadow:0 4px 20px rgba(255,255,255,0.08);}
+.scan-btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,255,255,0.14);}
+.scan-pulse{width:12px;height:12px;border-radius:50%;background:var(--accent);animation:blink 1.5s infinite;flex-shrink:0;}
+.scan-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;overflow:hidden;}
+.scan-card-head{background:rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.07);padding:12px 18px;display:flex;align-items:center;gap:8px;}
+.scan-idle{padding:40px 28px;text-align:center;}
+.scan-progress-wrap{padding:28px;display:none;}
+.scan-progress-wrap.show{display:block;}
+.scan-result{padding:20px;display:none;}
+.scan-result.show{display:block;}
+.scan-canvas{width:100%;height:190px;display:block;border-radius:8px;background:rgba(0,0,0,0.35);margin-bottom:14px;}
+.scan-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.scan-m{background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px;}
+.scan-ml{font-size:10px;color:rgba(255,255,255,0.3);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+.scan-mv{font-size:17px;font-weight:700;color:#fff;font-family:var(--ff-d);line-height:1.1;}
+.scan-ms{font-size:10px;color:rgba(255,255,255,0.25);font-family:var(--ff-m);}
+.scan-rec{background:rgba(79,201,142,0.08);border:1px solid rgba(79,201,142,0.2);border-radius:8px;padding:12px 14px;}
+.scan-quality-bar-wrap{height:5px;border-radius:3px;background:rgba(255,255,255,0.1);margin-bottom:4px;overflow:hidden;}
+.scan-quality-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,#2563b8,#4fc98e);transition:width 0.6s ease;}
+
+/* MEDIA UPLOAD */
+.pub-media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pub-media-zone{border:2px dashed var(--border);border-radius:9px;padding:22px;text-align:center;cursor:pointer;transition:all 0.18s;background:var(--off);position:relative;}
+.pub-media-zone:hover{border-color:var(--accent);background:rgba(37,99,184,0.03);}
+.pub-media-zone.required{border-color:rgba(224,80,80,0.4);}
+.pub-media-zone.has-files{border-color:rgba(79,201,142,0.5);background:rgba(79,201,142,0.03);}
+.pub-media-badge{position:absolute;top:8px;right:8px;background:#e05050;color:#fff;font-size:9px;font-family:var(--ff-m);font-weight:600;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:0.06em;}
+.pub-media-badge.ok{background:#22a060;}
+@media(max-width:768px){.scan-inner{grid-template-columns:1fr;gap:36px;}.scan-sec{padding:60px 20px;}.pub-media-grid{grid-template-columns:1fr;}}
+
 /* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 .fa{opacity:0;animation:fadeUp 0.5s ease forwards;}
@@ -439,13 +494,14 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
   <div class="nav-links">
     <a href="#producto">Producto</a>
     <a href="#terrenos">Terrenos</a>
+    <a href="#escanear">Escanear terreno</a>
     <a href="#capital-match">Calculadora</a>
     <a href="#funciona">Metodología</a>
     <a href="#planes">Planes</a>
   </div>
-  <div class="nav-right">
-    <button class="btn-ghost">Ingresar</button>
-    <button class="btn-navy">Solicitar acceso</button>
+  <div class="nav-right" id="navRight">
+    <button class="btn-ghost" onclick="openAuth('login')">Ingresar</button>
+    <button class="btn-navy" onclick="openAuth('register')">Crear cuenta</button>
   </div>
 </nav>
 
@@ -536,6 +592,71 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
   </div>
 </section>
 
+
+<!-- SCAN 3D -->
+<section class="scan-sec" id="escanear">
+  <div class="scan-inner">
+    <div>
+      <div class="s-tag-w reveal" style="color:rgba(74,158,255,0.8);">Nueva funcionalidad · Exclusivo móvil</div>
+      <h2 class="sh-w reveal">Escaneá el terreno<br><em>con tu celular.</em></h2>
+      <p class="s-desc-w reveal">Grabá un video corto dando una vuelta alrededor del lote. Plotr analiza los frames con visión computacional (Structure-from-Motion) y genera un modelo 3D con métricas reales: pendiente, área estimada y recomendación de fundación.</p>
+      <div class="reveal" style="display:flex;flex-direction:column;gap:12px;margin-top:4px;">
+        <button class="scan-btn-main" onclick="openScanCamera()">
+          <div class="scan-pulse"></div>
+          Escanear terreno
+        </button>
+        <input type="file" id="scan-file-input" accept="video/*,image/*" multiple capture="environment" style="display:none" onchange="handleScanFiles(this)">
+        <p style="font-size:12px;color:rgba(255,255,255,0.28);font-family:var(--ff-m);">Grabá 15–30 seg. caminando alrededor del lote · MP4, MOV, imágenes · Sin instalación</p>
+      </div>
+      <div class="hero-trust reveal" style="margin-top:28px;">
+        <span class="ht-txt">Structure-from-Motion</span>
+        <div class="ht-line"></div>
+        <span class="ht-txt">OpenCV</span>
+        <div class="ht-line"></div>
+        <span class="ht-txt">Modelo 3D en tiempo real</span>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="scan-card">
+        <div class="scan-card-head">
+          <div class="hch-dots">
+            <div class="hch-dot" style="background:#ff5f57"></div>
+            <div class="hch-dot" style="background:#febc2e"></div>
+            <div class="hch-dot" style="background:#28c840"></div>
+          </div>
+          <span class="hch-lbl" id="scanCardLabel">PLOTR · ANÁLISIS 3D · Sin escaneo activo</span>
+        </div>
+        <div class="scan-idle" id="scanIdle">
+          <div style="font-size:44px;margin-bottom:14px;">📷</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.45);margin-bottom:6px;font-weight:500;">Sin escaneo activo</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.22);font-family:var(--ff-m);">Presioná el botón para abrir la cámara</div>
+        </div>
+        <div class="scan-progress-wrap" id="scanProgress">
+          <div style="text-align:center;margin-bottom:18px;">
+            <div class="cap-spinner" style="border-top-color:#4a9eff;margin-bottom:12px;"></div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.55);font-family:var(--ff-m);" id="scanProgressTxt">Subiendo archivos...</div>
+          </div>
+          <div class="scan-quality-bar-wrap"><div class="scan-quality-bar" id="scanQBar" style="width:5%"></div></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.25);font-family:var(--ff-m);text-align:center;margin-top:4px;" id="scanProgressPct">Procesando...</div>
+        </div>
+        <div class="scan-result" id="scanResult">
+          <canvas class="scan-canvas" id="scanCanvas"></canvas>
+          <div class="scan-metrics">
+            <div class="scan-m"><div class="scan-ml">Área estimada</div><div class="scan-mv" id="srArea">—</div><div class="scan-ms">m²</div></div>
+            <div class="scan-m"><div class="scan-ml">Pendiente</div><div class="scan-mv" id="srSlope">—</div><div class="scan-ms">%</div></div>
+            <div class="scan-m"><div class="scan-ml">Tipo de terreno</div><div class="scan-mv" style="font-size:12px;" id="srType">—</div><div class="scan-ms">clasificación</div></div>
+            <div class="scan-m"><div class="scan-ml">Calidad del scan</div><div class="scan-mv" id="srQuality">—</div><div class="scan-ms">/ 100</div></div>
+          </div>
+          <div class="scan-rec">
+            <div style="font-size:10px;color:rgba(79,201,142,0.7);font-family:var(--ff-m);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Recomendación de fundación</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.8);" id="srFoundation">—</div>
+          </div>
+          <button style="width:100%;margin-top:12px;padding:10px;border-radius:7px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);font-size:12px;font-family:var(--ff-b);cursor:pointer;" onclick="resetScan()">Nuevo escaneo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- CAPITAL MATCHER -->
 <section class="sec" id="capital-match" style="background:var(--off);">
@@ -751,6 +872,417 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
 </div>
 
 <script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+// Reemplazá esta URL con la URL de tu backend en Railway después del deploy.
+const API_BASE = 'REEMPLAZAR_CON_URL_RAILWAY';
+
+// ── AUTH TOKEN ────────────────────────────────────────────────────────────────
+function getToken() { return localStorage.getItem('plotr_token'); }
+function setToken(t) { localStorage.setItem('plotr_token', t); }
+function clearToken() { localStorage.removeItem('plotr_token'); localStorage.removeItem('plotr_user'); }
+function getUser() { try { return JSON.parse(localStorage.getItem('plotr_user') || 'null'); } catch(e) { return null; } }
+function setUser(u) { localStorage.setItem('plotr_user', JSON.stringify(u)); }
+function isLoggedIn() { return !!getToken(); }
+
+function updateNavAuth() {
+  var nr = document.getElementById('navRight');
+  var u = getUser();
+  if(u) {
+    nr.innerHTML = '<span style="font-size:13px;color:var(--text-mid);font-family:var(--ff-m);">👤 '+u.nombre.split(' ')[0]+'</span>'
+      + '<button class="btn-ghost" onclick="logout()" style="font-size:12px;">Salir</button>';
+  } else {
+    nr.innerHTML = '<button class="btn-ghost" onclick="openAuth(\'login\')">Ingresar</button>'
+      + '<button class="btn-navy" onclick="openAuth(\'register\')">Crear cuenta</button>';
+  }
+}
+
+function logout() { clearToken(); updateNavAuth(); }
+
+// ── AUTH MODAL ────────────────────────────────────────────────────────────────
+var _authCallback = null;
+
+function openAuth(tab, callback) {
+  _authCallback = callback || null;
+  document.getElementById('auth-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  switchAuthTab(tab || 'login');
+  document.getElementById('loginErr').textContent = '';
+  document.getElementById('regErr').textContent = '';
+}
+function closeAuth() {
+  document.getElementById('auth-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeAuthOutside(e) { if(e.target === document.getElementById('auth-overlay')) closeAuth(); }
+function switchAuthTab(tab) {
+  document.getElementById('authLoginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('authRegisterForm').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+}
+
+async function submitLogin() {
+  var email = document.getElementById('loginEmail').value.trim();
+  var pass  = document.getElementById('loginPassword').value;
+  var errEl = document.getElementById('loginErr');
+  var btn   = document.getElementById('loginBtn');
+  if(!email || !pass) { errEl.textContent = 'Completá email y contraseña.'; return; }
+  btn.disabled = true; btn.textContent = 'Ingresando...';
+  errEl.textContent = '';
+  try {
+    var r = await fetch(API_BASE + '/auth/login', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email: email, password: pass})
+    });
+    var d = await r.json();
+    if(!r.ok) { errEl.textContent = d.detail || 'Error al ingresar.'; return; }
+    setToken(d.access_token); setUser(d.user);
+    updateNavAuth(); closeAuth();
+    if(_authCallback) { _authCallback(); _authCallback = null; }
+  } catch(e) {
+    errEl.textContent = 'No se pudo conectar con el servidor.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Ingresar';
+  }
+}
+
+async function submitRegister() {
+  var nombre = document.getElementById('regNombre').value.trim();
+  var email  = document.getElementById('regEmail').value.trim();
+  var pass   = document.getElementById('regPassword').value;
+  var errEl  = document.getElementById('regErr');
+  var btn    = document.getElementById('regBtn');
+  if(!nombre || !email || !pass) { errEl.textContent = 'Completá todos los campos.'; return; }
+  if(pass.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; return; }
+  btn.disabled = true; btn.textContent = 'Creando cuenta...';
+  errEl.textContent = '';
+  try {
+    var r = await fetch(API_BASE + '/auth/register', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({nombre: nombre, email: email, password: pass})
+    });
+    var d = await r.json();
+    if(!r.ok) { errEl.textContent = d.detail || 'Error al registrarse.'; return; }
+    setToken(d.access_token); setUser(d.user);
+    updateNavAuth(); closeAuth();
+    if(_authCallback) { _authCallback(); _authCallback = null; }
+  } catch(e) {
+    errEl.textContent = 'No se pudo conectar con el servidor.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Crear cuenta gratis';
+  }
+}
+
+// ── SCAN 3D ───────────────────────────────────────────────────────────────────
+var _scanPollInterval = null;
+
+function openScanCamera() {
+  if(!isLoggedIn()) {
+    openAuth('login', function(){ openScanCamera(); });
+    return;
+  }
+  document.getElementById('scan-file-input').click();
+}
+
+function resetScan() {
+  document.getElementById('scanIdle').style.display = 'block';
+  document.getElementById('scanProgress').classList.remove('show');
+  document.getElementById('scanResult').classList.remove('show');
+  document.getElementById('scanCardLabel').textContent = 'PLOTR · ANÁLISIS 3D · Sin escaneo activo';
+  document.getElementById('scan-file-input').value = '';
+  if(_scanPollInterval) clearInterval(_scanPollInterval);
+}
+
+async function handleScanFiles(input) {
+  if(!input.files || !input.files.length) return;
+  document.getElementById('scanIdle').style.display = 'none';
+  document.getElementById('scanProgress').classList.add('show');
+  document.getElementById('scanResult').classList.remove('show');
+  document.getElementById('scanProgressTxt').textContent = 'Subiendo archivos...';
+  document.getElementById('scanQBar').style.width = '10%';
+  document.getElementById('scanProgressPct').textContent = 'Subiendo...';
+
+  var fd = new FormData();
+  for(var i = 0; i < input.files.length; i++) fd.append('archivos', input.files[i]);
+
+  try {
+    var r = await fetch(API_BASE + '/scan/', {
+      method: 'POST',
+      headers: {'Authorization': 'Bearer ' + getToken()},
+      body: fd
+    });
+    if(!r.ok) {
+      var e = await r.json();
+      alert('Error al subir: ' + (e.detail || 'Error desconocido'));
+      resetScan(); return;
+    }
+    var scan = await r.json();
+    document.getElementById('scanQBar').style.width = '30%';
+    document.getElementById('scanProgressTxt').textContent = 'Procesando modelo 3D...';
+    document.getElementById('scanProgressPct').textContent = 'Analizando frames...';
+    pollScan(scan.id);
+  } catch(e) {
+    alert('No se pudo conectar con el servidor.');
+    resetScan();
+  }
+}
+
+function pollScan(scanId) {
+  var attempts = 0;
+  var progress = 30;
+  _scanPollInterval = setInterval(async function() {
+    attempts++;
+    progress = Math.min(90, progress + 5);
+    document.getElementById('scanQBar').style.width = progress + '%';
+
+    try {
+      var r = await fetch(API_BASE + '/scan/' + scanId, {
+        headers: {'Authorization': 'Bearer ' + getToken()}
+      });
+      var scan = await r.json();
+      if(scan.status === 'completed') {
+        clearInterval(_scanPollInterval);
+        showScanResult(scan);
+      } else if(scan.status === 'failed') {
+        clearInterval(_scanPollInterval);
+        document.getElementById('scanProgressTxt').textContent = 'Error: ' + (scan.error_message || 'análisis fallido');
+      }
+    } catch(e) {}
+
+    if(attempts > 30) { clearInterval(_scanPollInterval); }
+  }, 2000);
+}
+
+function showScanResult(scan) {
+  document.getElementById('scanProgress').classList.remove('show');
+  document.getElementById('scanResult').classList.add('show');
+  document.getElementById('scanCardLabel').textContent = 'PLOTR · ANÁLISIS 3D · Completado';
+  document.getElementById('srArea').textContent = scan.estimated_area_m2 > 0 ? scan.estimated_area_m2 : '—';
+  document.getElementById('srSlope').textContent = scan.slope_percentage !== null ? scan.slope_percentage : '—';
+  document.getElementById('srQuality').textContent = scan.scan_quality_score !== null ? scan.scan_quality_score : '—';
+  var typeMap = {plano:'Plano',pendiente_suave:'Pendiente suave',pendiente_moderada:'Pendiente moderada',pendiente_pronunciada:'Pendiente pronunciada',indeterminado:'—'};
+  document.getElementById('srType').textContent = typeMap[scan.terrain_type] || scan.terrain_type || '—';
+  document.getElementById('srFoundation').textContent = scan.recommended_foundation || '—';
+  if(scan.point_cloud && scan.point_cloud.length > 0) renderPointCloud(scan.point_cloud);
+}
+
+function renderPointCloud(pts) {
+  var cv = document.getElementById('scanCanvas');
+  var ctx = cv.getContext('2d');
+  cv.width = cv.offsetWidth || 400;
+  cv.height = cv.offsetHeight || 190;
+  var W = cv.width, H = cv.height;
+  ctx.fillStyle = 'rgba(7,20,40,0.95)';
+  ctx.fillRect(0,0,W,H);
+
+  if(!pts || !pts.length) return;
+  var xs = pts.map(function(p){return p[0];}), ys = pts.map(function(p){return p[1];}), zs = pts.map(function(p){return p[2];});
+  var minX=Math.min.apply(null,xs), maxX=Math.max.apply(null,xs);
+  var minY=Math.min.apply(null,ys), maxY=Math.max.apply(null,ys);
+  var minZ=Math.min.apply(null,zs), maxZ=Math.max.apply(null,zs);
+  var rangeX=maxX-minX||1, rangeY=maxY-minY||1, rangeZ=maxZ-minZ||1;
+  var ry = 0.5;
+
+  function project3d(x,y,z) {
+    var cx2=Math.cos(ry), sx2=Math.sin(ry);
+    var px=x*cx2-z*sx2, pz=x*sx2+z*cx2;
+    var fov=300, d=fov/(fov+pz+200);
+    return {x:W/2+px*d*80, y:H*0.55+y*d*80};
+  }
+
+  pts.forEach(function(p) {
+    var nx=(p[0]-minX)/rangeX*2-1, ny=(p[1]-minY)/rangeY*2-1, nz=(p[2]-minZ)/rangeZ*2-1;
+    var pr=project3d(nx,ny,nz);
+    var heat=Math.floor(((p[2]-minZ)/rangeZ)*255);
+    ctx.fillStyle='rgba('+Math.floor(37+heat*0.5)+','+(99+Math.floor(heat*0.35))+','+Math.floor(184+heat*0.28)+',0.7)';
+    ctx.fillRect(pr.x,pr.y,2,2);
+  });
+
+  ctx.font='9px DM Mono, monospace'; ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.textAlign='left';
+  ctx.fillText(pts.length+' puntos · rotá con el mouse', 10, H-10);
+
+  var drag=false, lx=0;
+  cv.onmousedown=function(e){drag=true;lx=e.clientX;};
+  window.onmouseup=function(){drag=false;};
+  cv.onmousemove=function(e){
+    if(!drag) return;
+    ry+=(e.clientX-lx)*0.01; lx=e.clientX;
+    ctx.fillStyle='rgba(7,20,40,0.95)'; ctx.fillRect(0,0,W,H);
+    pts.forEach(function(p){
+      var nx=(p[0]-minX)/rangeX*2-1, ny=(p[1]-minY)/rangeY*2-1, nz=(p[2]-minZ)/rangeZ*2-1;
+      var pr=project3d(nx,ny,nz);
+      var heat=Math.floor(((p[2]-minZ)/rangeZ)*255);
+      ctx.fillStyle='rgba('+Math.floor(37+heat*0.5)+','+(99+Math.floor(heat*0.35))+','+Math.floor(184+heat*0.28)+',0.7)';
+      ctx.fillRect(pr.x,pr.y,2,2);
+    });
+  };
+}
+
+// ── PUBLISH MODAL — MEDIA HANDLING ───────────────────────────────────────────
+var _pubPhotos = [], _pubVideos = [];
+
+function handleMediaFiles(input, type) {
+  var files = Array.from(input.files);
+  var preview = document.getElementById('pub-' + type + '-preview');
+  var zone = document.getElementById('pub-' + type + '-zone');
+  var badge = document.getElementById('pub-' + type + '-badge');
+  if(type === 'photo') _pubPhotos = files; else _pubVideos = files;
+  preview.innerHTML = '';
+  files.forEach(function(f) {
+    var item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:8px;background:var(--off);border-radius:6px;padding:7px 10px;font-size:11px;color:var(--text-mid);font-family:var(--ff-m);border:1px solid var(--border);';
+    var icon = type === 'photo' ? '🖼' : '🎥';
+    item.innerHTML = icon + ' ' + f.name.substring(0,28) + (f.name.length>28?'…':'') + ' <span style="color:var(--text-xlight);margin-left:auto;">' + (f.size/1024/1024).toFixed(1) + ' MB</span>';
+    preview.appendChild(item);
+  });
+  if(files.length > 0) {
+    zone.classList.remove('required'); zone.classList.add('has-files');
+    badge.textContent = files.length + ' archivo' + (files.length>1?'s':'');
+    badge.classList.add('ok');
+  }
+}
+
+// ── PUBLISH MODAL — SUBMIT ────────────────────────────────────────────────────
+async function submitPublish() {
+  var errEl = document.getElementById('pub-submit-err');
+  var btn   = document.getElementById('pub-submit-btn');
+  errEl.style.display = 'none';
+
+  if(!isLoggedIn()) {
+    openAuth('login', function(){ submitPublish(); });
+    return;
+  }
+
+  // Validate required fields
+  var dirs = document.getElementById('pDireccion').value.trim();
+  var barrio = document.getElementById('pBarrio').value.trim();
+  var sup = parseFloat(document.getElementById('pSuperficie').value);
+  var precio = parseFloat(document.getElementById('pPrecio').value);
+  var nombre = document.getElementById('pNombre').value.trim();
+  var email = document.getElementById('pEmail').value.trim();
+  var tel = document.getElementById('pTelefono').value.trim();
+  var desc = document.getElementById('pDescripcion').value.trim();
+
+  if(!dirs||!barrio||!nombre||!email||!tel||!desc||!sup||!precio) {
+    errEl.textContent = '⚠ Completá todos los campos obligatorios (marcados con *).';
+    errEl.style.display = 'block'; return;
+  }
+  if(_pubPhotos.length === 0) {
+    errEl.textContent = '⚠ Debés subir al menos una foto del terreno.';
+    errEl.style.display = 'block'; return;
+  }
+  if(_pubVideos.length === 0) {
+    errEl.textContent = '⚠ Debés subir al menos un video del terreno.';
+    errEl.style.display = 'block'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Publicando...';
+
+  var fd = new FormData();
+  fd.append('direccion', dirs);
+  fd.append('barrio', barrio);
+  fd.append('superficie_m2', sup);
+  fd.append('precio_usd', precio);
+  fd.append('tipo_terreno', 'baldío');
+  fd.append('uso_suelo', 'residencial');
+  fd.append('descripcion', desc);
+  fd.append('nombre_contacto', nombre);
+  fd.append('email_contacto', email);
+  fd.append('telefono_contacto', tel);
+  _pubPhotos.forEach(function(f){ fd.append('fotos', f); });
+  _pubVideos.forEach(function(f){ fd.append('videos', f); });
+  var docFiles = document.getElementById('pub-file-input').files;
+  for(var i=0;i<docFiles.length;i++) fd.append('documentos', docFiles[i]);
+
+  try {
+    var r = await fetch(API_BASE + '/listings/', {
+      method: 'POST',
+      headers: {'Authorization': 'Bearer ' + getToken()},
+      body: fd
+    });
+    var d = await r.json();
+    if(!r.ok) {
+      errEl.textContent = '⚠ ' + (d.detail || 'Error al publicar.');
+      errEl.style.display = 'block'; return;
+    }
+    // Success
+    document.getElementById('pub-form-wrap').style.display = 'none';
+    document.getElementById('pub-success').style.display = 'block';
+    document.getElementById('pub-success').querySelector('.pub-success-desc').innerHTML =
+      'Tu terreno fue publicado exitosamente en la plataforma Plotr.<br><br>' +
+      '<span style="font-family:var(--ff-m);font-size:12px;color:var(--text-xlight);">ID de publicación: PLT-' + d.id + '</span>';
+    _pubPhotos = []; _pubVideos = [];
+  } catch(e) {
+    errEl.textContent = '⚠ No se pudo conectar con el servidor.';
+    errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Publicar terreno →';
+  }
+}
+
+// ── CAPITAL MATCHER — conectado al API con fallback local ─────────────────────
+async function runCapMatch() {
+  var capital = parseInt(document.getElementById('capRange').value);
+  var tipo    = document.getElementById('capTipo').value;
+  var zona    = document.getElementById('capZona').value;
+  var m2Min   = parseFloat(document.getElementById('capM2').value) || 0;
+
+  document.getElementById('capResults').classList.remove('show');
+  document.getElementById('capLoading').classList.add('show');
+
+  try {
+    var body = { capital_usd: capital, tolerance_pct: 0.4 };
+    if(tipo !== 'todos') body.uso_suelo = tipo;
+    if(m2Min > 0) body.superficie_min_m2 = m2Min;
+    if(zona !== 'todas') body.barrios = [zona.replace('caba','CABA').replace('gba-norte','GBA Norte').replace('gba-sur','GBA Sur').replace('gba-oeste','GBA Oeste')];
+
+    var r = await fetch(API_BASE + '/capital-matcher/', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    var results = await r.json();
+
+    document.getElementById('capLoading').classList.remove('show');
+    document.getElementById('capResTitle').textContent = results.length + ' terreno' + (results.length!==1?'s':'') + ' compatible' + (results.length!==1?'s':'') + ' encontrado' + (results.length!==1?'s':'');
+    document.getElementById('capResSub').textContent = 'Desde base de datos Plotr · ' + formatUSD(capital) + ' disponibles';
+
+    var grid = document.getElementById('capResGrid');
+    grid.innerHTML = '';
+    if(results.length === 0) {
+      grid.innerHTML = '<div class="cap-no-results"><div class="cap-no-icon">🔍</div><div>No se encontraron terrenos con estos criterios.<br>Probá ampliando el presupuesto o cambiando la zona.</div></div>';
+    } else {
+      results.slice(0,4).forEach(function(r, i) {
+        var t = r.listing, isTop = i===0;
+        var card = document.createElement('div');
+        card.className = 'cap-card' + (isTop?' top':'');
+        card.innerHTML =
+          '<div class="cap-card-head">'+
+            '<span class="cap-card-match">'+r.compatibility_score+'% compatible</span>'+
+            '<span class="cap-card-rank">'+(isTop?'✦ Mejor opción':'#'+(i+1))+'</span>'+
+          '</div>'+
+          '<div class="cap-card-body">'+
+            '<div class="cap-card-addr">'+t.direccion+'</div>'+
+            '<div class="cap-card-zone">'+t.barrio+' · '+t.localidad+'</div>'+
+            '<div class="cap-card-specs">'+
+              '<div class="cap-card-sp"><div class="cap-sp-l">Superficie</div><div class="cap-sp-v">'+t.superficie_m2+' m²</div></div>'+
+              '<div class="cap-card-sp"><div class="cap-sp-l">FOT</div><div class="cap-sp-v">'+(t.fot||'—')+'</div></div>'+
+            '</div>'+
+          '</div>'+
+          '<div class="cap-card-footer">'+
+            '<div><div class="cap-card-price">'+formatUSD(t.precio_usd)+'</div></div>'+
+            '<button class="cap-view-btn">Ver terreno</button>'+
+          '</div>';
+        grid.appendChild(card);
+      });
+    }
+    document.getElementById('capResults').classList.add('show');
+    document.getElementById('capResults').scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(e) {
+    // API not available yet — run local fallback
+    runCapMatchLocal(capital, tipo, zona, m2Min);
+  }
+}
+
 // SCROLL REVEAL
 const ro = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
@@ -1001,11 +1533,7 @@ function resetCapMatch() {
   document.getElementById('capLoading').classList.remove('show');
 }
 
-function runCapMatch() {
-  var capital = parseInt(document.getElementById('capRange').value);
-  var tipo = document.getElementById('capTipo').value;
-  var zona = document.getElementById('capZona').value;
-  var m2Min = parseInt(document.getElementById('capM2').value) || 0;
+function runCapMatchLocal(capital, tipo, zona, m2Min) {
   var prios = Array.from(document.querySelectorAll('.cap-tag.sel')).map(function(t){ return t.textContent.trim(); });
 
   // Show loading
@@ -1134,6 +1662,7 @@ function openPublish(){
   document.body.style.overflow='hidden';
   document.getElementById('pub-form-wrap').style.display='block';
   document.getElementById('pub-success').style.display='none';
+  document.getElementById('pub-submit-err').style.display='none';
 }
 function closePublish(){
   document.getElementById('pub-overlay').classList.remove('open');
@@ -1142,9 +1671,7 @@ function closePublish(){
 function closePubOutside(e){
   if(e.target===document.getElementById('pub-overlay')) closePublish();
 }
-function toggleTag(el){
-  el.classList.toggle('selected');
-}
+function toggleTag(el){ el.classList.toggle('selected'); }
 function handleFiles(input){
   var list = document.getElementById('pub-file-list');
   Array.from(input.files).forEach(function(f){
@@ -1154,26 +1681,9 @@ function handleFiles(input){
     list.appendChild(item);
   });
 }
-function submitPublish(){
-  var required = document.querySelectorAll('#pub-form-wrap .pub-inp[placeholder], #pub-form-wrap .pub-textarea');
-  var valid = true;
-  // Simple validation on required fields (those with red asterisk labels)
-  var reqFields = document.querySelectorAll('#pub-form-wrap .pub-label span');
-  reqFields.forEach(function(span){
-    var field = span.closest('.pub-field').querySelector('.pub-inp, .pub-textarea');
-    if(field && !field.value.trim()){
-      field.style.borderColor='#e05050';
-      valid = false;
-      setTimeout(function(){ field.style.borderColor=''; }, 2000);
-    }
-  });
-  if(!valid){ return; }
-  document.getElementById('pub-form-wrap').style.display='none';
-  document.getElementById('pub-success').style.display='block';
-  document.getElementById('pub-success').querySelector('.pub-success-desc').innerHTML =
-    'Recibimos los datos de tu lote. El equipo de Plotr verificará la información con fuentes oficiales y te contactará en un plazo de 48 horas hábiles para confirmar la publicación.<br><br>' +
-    '<span style="font-family:var(--ff-m);font-size:12px;color:var(--text-xlight);">Número de referencia: PLT-2026-'+Math.floor(Math.random()*90000+10000)+'</span>';
-}
+
+// Init on page load
+updateNavAuth();
 
 </script>
 
@@ -1198,11 +1708,11 @@ function submitPublish(){
           <div class="pub-grid">
             <div class="pub-field full">
               <label class="pub-label">Dirección completa <span>*</span></label>
-              <input class="pub-inp" type="text" placeholder="Ej: Av. Corrientes 4850, CABA">
+              <input class="pub-inp" id="pDireccion" type="text" placeholder="Ej: Av. Corrientes 4850, CABA">
             </div>
             <div class="pub-field">
               <label class="pub-label">Barrio / Localidad <span>*</span></label>
-              <input class="pub-inp" type="text" placeholder="Ej: Almagro">
+              <input class="pub-inp" id="pBarrio" type="text" placeholder="Ej: Almagro">
             </div>
             <div class="pub-field">
               <label class="pub-label">Zona</label>
@@ -1232,7 +1742,7 @@ function submitPublish(){
           <div class="pub-grid-3">
             <div class="pub-field">
               <label class="pub-label">Superficie total (m²) <span>*</span></label>
-              <input class="pub-inp" type="number" placeholder="320">
+              <input class="pub-inp" id="pSuperficie" type="number" placeholder="320">
             </div>
             <div class="pub-field">
               <label class="pub-label">Frente (metros)</label>
@@ -1309,7 +1819,7 @@ function submitPublish(){
           <div class="pub-section-title">Descripción técnica</div>
           <div class="pub-field">
             <label class="pub-label">Descripción del lote <span>*</span></label>
-            <textarea class="pub-textarea" placeholder="Describí las condiciones actuales del terreno, características del suelo, entorno urbano, potencial de desarrollo, accesibilidad, servicios disponibles y cualquier dato relevante para el comprador o desarrollador..."></textarea>
+            <textarea class="pub-textarea" id="pDescripcion" placeholder="Describí las condiciones actuales del terreno, características del suelo, entorno urbano, potencial de desarrollo, accesibilidad, servicios disponibles y cualquier dato relevante para el comprador o desarrollador..."></textarea>
           </div>
         </div>
 
@@ -1319,7 +1829,7 @@ function submitPublish(){
           <div class="pub-grid">
             <div class="pub-field">
               <label class="pub-label">Precio pedido (USD) <span>*</span></label>
-              <input class="pub-inp" type="number" placeholder="250000">
+              <input class="pub-inp" id="pPrecio" type="number" placeholder="250000">
             </div>
             <div class="pub-field">
               <label class="pub-label">Modalidad de venta</label>
@@ -1360,15 +1870,15 @@ function submitPublish(){
           <div class="pub-grid">
             <div class="pub-field">
               <label class="pub-label">Nombre completo / Razón social <span>*</span></label>
-              <input class="pub-inp" type="text" placeholder="Ej: Juan García o Desarrollos S.A.">
+              <input class="pub-inp" id="pNombre" type="text" placeholder="Ej: Juan García o Desarrollos S.A.">
             </div>
             <div class="pub-field">
               <label class="pub-label">Correo electrónico <span>*</span></label>
-              <input class="pub-inp" type="email" placeholder="contacto@empresa.com.ar">
+              <input class="pub-inp" id="pEmail" type="email" placeholder="contacto@empresa.com.ar">
             </div>
             <div class="pub-field">
-              <label class="pub-label">Teléfono / WhatsApp</label>
-              <input class="pub-inp" type="tel" placeholder="+54 11 XXXX-XXXX">
+              <label class="pub-label">Teléfono / WhatsApp <span>*</span></label>
+              <input class="pub-inp" id="pTelefono" type="tel" placeholder="+54 11 XXXX-XXXX">
             </div>
             <div class="pub-field">
               <label class="pub-label">Sitio web o portfolio (opcional)</label>
@@ -1377,27 +1887,59 @@ function submitPublish(){
           </div>
         </div>
 
-        <!-- DOCUMENTACION -->
+        <!-- FOTOS — OBLIGATORIO -->
+        <div class="pub-section">
+          <div class="pub-section-title">Fotos del terreno <span style="color:#e05050;">*</span> — obligatorio</div>
+          <div class="pub-media-grid">
+            <div class="pub-media-zone required" id="pub-photo-zone" onclick="document.getElementById('pub-photo-input').click()">
+              <div class="pub-media-badge" id="pub-photo-badge">Requerido</div>
+              <div style="font-size:28px;margin-bottom:8px;">📸</div>
+              <div style="font-size:13px;color:var(--text-mid);margin-bottom:4px;font-weight:600;">Fotos del lote</div>
+              <div style="font-size:11px;color:var(--text-xlight);font-family:var(--ff-m);">JPG, PNG, WEBP · Máx. 20MB c/u · Mín. 1 foto</div>
+              <input type="file" id="pub-photo-input" multiple accept=".jpg,.jpeg,.png,.webp,.heic" style="display:none" onchange="handleMediaFiles(this,'photo')">
+            </div>
+            <div id="pub-photo-preview" style="display:flex;flex-direction:column;gap:6px;justify-content:flex-start;max-height:120px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- VIDEOS — OBLIGATORIO -->
+        <div class="pub-section">
+          <div class="pub-section-title">Videos del terreno <span style="color:#e05050;">*</span> — obligatorio</div>
+          <div class="pub-media-grid">
+            <div class="pub-media-zone required" id="pub-video-zone" onclick="document.getElementById('pub-video-input').click()">
+              <div class="pub-media-badge" id="pub-video-badge">Requerido</div>
+              <div style="font-size:28px;margin-bottom:8px;">🎥</div>
+              <div style="font-size:13px;color:var(--text-mid);margin-bottom:4px;font-weight:600;">Video del lote</div>
+              <div style="font-size:11px;color:var(--text-xlight);font-family:var(--ff-m);">MP4, MOV, AVI · Máx. 200MB · Mín. 1 video</div>
+              <input type="file" id="pub-video-input" multiple accept=".mp4,.mov,.avi,.webm,.mkv,.3gp" capture="environment" style="display:none" onchange="handleMediaFiles(this,'video')">
+            </div>
+            <div id="pub-video-preview" style="display:flex;flex-direction:column;gap:6px;justify-content:flex-start;max-height:120px;overflow-y:auto;"></div>
+          </div>
+          <p style="font-size:11px;color:var(--text-xlight);margin-top:10px;font-family:var(--ff-m);">💡 Tip: grabá un video caminando alrededor del terreno. En el celular se abre la cámara directamente.</p>
+        </div>
+
+        <!-- DOCUMENTACION (opcional) -->
         <div class="pub-section" style="margin-bottom:0;">
           <div class="pub-section-title">Documentación adjunta (opcional)</div>
           <div class="pub-upload-area" onclick="document.getElementById('pub-file-input').click()">
             <div class="pub-upload-icon">📎</div>
             <div class="pub-upload-text">Arrastrá archivos o hacé clic para adjuntar</div>
-            <div class="pub-upload-sub">Planos, escrituras, informe de dominio, fotos del lote · PDF, JPG, PNG · Máx. 20MB c/u</div>
+            <div class="pub-upload-sub">Planos, escrituras, informe de dominio · PDF · Máx. 20MB c/u</div>
           </div>
-          <input type="file" id="pub-file-input" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFiles(this)">
+          <input type="file" id="pub-file-input" multiple accept=".pdf" style="display:none" onchange="handleFiles(this)">
           <div id="pub-file-list" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;"></div>
         </div>
 
       </div>
 
       <div class="pub-foot">
-        <span class="pub-note">Los campos marcados con <span style="color:#e05050;">*</span> son obligatorios. Plotr verificará los datos antes de publicar.</span>
+        <span class="pub-note">Los campos con <span style="color:#e05050;">*</span> son obligatorios. Fotos y videos son requeridos.</span>
         <div class="pub-foot-btns">
           <button class="pub-cancel" onclick="closePublish()">Cancelar</button>
-          <button class="pub-submit" onclick="submitPublish()">Enviar para revisión →</button>
+          <button class="pub-submit" id="pub-submit-btn" onclick="submitPublish()">Publicar terreno →</button>
         </div>
       </div>
+      <div id="pub-submit-err" style="display:none;padding:10px 28px 14px;font-size:12px;color:#e05050;font-family:var(--ff-m);"></div>
     </div>
 
     <!-- SUCCESS STATE -->
@@ -1409,6 +1951,50 @@ function submitPublish(){
       <button class="btn-navy" style="margin-top:24px;" onclick="closePublish()">Cerrar</button>
     </div>
 
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="auth-overlay" onclick="closeAuthOutside(event)">
+  <div class="auth-box">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <div class="auth-head">
+      <div class="auth-logo">Plotr<span style="color:var(--accent);">.</span></div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Ingresar</button>
+        <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Crear cuenta</button>
+      </div>
+    </div>
+    <div class="auth-body">
+      <div id="authLoginForm">
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <input class="auth-inp" type="email" id="loginEmail" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')submitLogin()">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Contraseña</label>
+          <input class="auth-inp" type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitLogin()">
+        </div>
+        <div class="auth-err" id="loginErr"></div>
+        <button class="auth-btn" id="loginBtn" onclick="submitLogin()">Ingresar</button>
+      </div>
+      <div id="authRegisterForm" style="display:none;">
+        <div class="auth-field">
+          <label class="auth-label">Nombre completo</label>
+          <input class="auth-inp" type="text" id="regNombre" placeholder="Juan García">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <input class="auth-inp" type="email" id="regEmail" placeholder="tu@email.com">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Contraseña</label>
+          <input class="auth-inp" type="password" id="regPassword" placeholder="Mínimo 6 caracteres" onkeydown="if(event.key==='Enter')submitRegister()">
+        </div>
+        <div class="auth-err" id="regErr"></div>
+        <button class="auth-btn" id="regBtn" onclick="submitRegister()">Crear cuenta gratis</button>
+      </div>
+    </div>
   </div>
 </div>
 
