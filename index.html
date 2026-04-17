@@ -909,7 +909,7 @@ function apiTimeout(ms) {
   });
 }
 async function apiFetch(url, opts) {
-  return Promise.race([fetch(url, opts), apiTimeout(55000)]);
+  return Promise.race([fetch(url, opts), apiTimeout(90000)]);
 }
 
 // ── AUTH TOKEN ────────────────────────────────────────────────────────────────
@@ -957,6 +957,34 @@ function switchAuthTab(tab) {
   document.getElementById('tab-register').classList.toggle('active', tab === 'register');
 }
 
+// Polls /health every 5s until server is up, then calls retryFn
+function _waitForServerThenRetry(errId, btnId, btnLabel, retryFn) {
+  var errEl = document.getElementById(errId);
+  var btn   = document.getElementById(btnId);
+  if(!btn) return;
+  btn.disabled = true; btn.textContent = 'Esperando servidor...';
+  var elapsed = 0;
+  if(errEl) errEl.innerHTML = '⏳ Servidor iniciando: <span id="' + errId + 'CD">0</span>s — esto solo pasa la primera vez';
+  var timer = setInterval(function() {
+    elapsed += 5;
+    var cd = document.getElementById(errId + 'CD');
+    if(cd) cd.textContent = elapsed;
+    if(elapsed > 150) {
+      clearInterval(timer);
+      if(errEl) errEl.textContent = 'Tiempo agotado. Recargá la página e intentá de nuevo.';
+      if(btn) { btn.disabled=false; btn.textContent=btnLabel; }
+      return;
+    }
+    fetch(API_BASE + '/health').then(function(r) {
+      if(r.ok) {
+        clearInterval(timer);
+        if(errEl) errEl.textContent = '';
+        retryFn();
+      }
+    }).catch(function(){});
+  }, 5000);
+}
+
 async function submitLogin() {
   var email = document.getElementById('loginEmail').value.trim();
   var pass  = document.getElementById('loginPassword').value;
@@ -977,15 +1005,7 @@ async function submitLogin() {
     if(_authCallback) { _authCallback(); _authCallback = null; }
     btn.disabled=false; btn.textContent='Ingresar';
   } catch(e) {
-    var secs = 35;
-    errEl.innerHTML = '⏳ Servidor iniciando... reintentando en <span id="loginCD">35</span>s';
-    btn.textContent = 'Esperando...';
-    var iv = setInterval(function() {
-      secs--;
-      var el = document.getElementById('loginCD');
-      if(el) el.textContent = secs;
-      if(secs <= 0) { clearInterval(iv); submitLogin(); }
-    }, 1000);
+    _waitForServerThenRetry('loginErr', 'loginBtn', 'Ingresar', submitLogin);
   }
 }
 
@@ -1011,15 +1031,7 @@ async function submitRegister() {
     if(_authCallback) { _authCallback(); _authCallback = null; }
     btn.disabled=false; btn.textContent='Crear cuenta gratis';
   } catch(e) {
-    var secs = 35;
-    errEl.innerHTML = '⏳ Servidor iniciando... reintentando en <span id="regCD">35</span>s';
-    btn.textContent = 'Esperando...';
-    var iv = setInterval(function() {
-      secs--;
-      var el = document.getElementById('regCD');
-      if(el) el.textContent = secs;
-      if(secs <= 0) { clearInterval(iv); submitRegister(); }
-    }, 1000);
+    _waitForServerThenRetry('regErr', 'regBtn', 'Crear cuenta gratis', submitRegister);
   }
 }
 
