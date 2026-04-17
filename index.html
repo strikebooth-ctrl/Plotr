@@ -466,6 +466,14 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
 </head>
 <body>
 
+<!-- SERVER WAKEUP BANNER -->
+<div id="wakeup-banner" style="display:none;position:fixed;bottom:20px;right:20px;z-index:999;background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-family:var(--ff-m);box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:280px;line-height:1.5;">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div class="cap-spinner" style="width:16px;height:16px;border-width:2px;flex-shrink:0;border-top-color:#4a9eff;"></div>
+    <div>Servidor iniciando...<br><span style="color:rgba(255,255,255,0.5);font-size:11px;">Listo en ~30 seg · solo al arrancar</span></div>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#">
@@ -518,8 +526,8 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
       <h1 class="hero-h fa fa2">Evaluá un terreno antes de<br><em>comprometerte con él.</em></h1>
       <p class="hero-sub fa fa3">Plotr centraliza datos normativos, geotécnicos y catastrales de cada lote en un único informe técnico estructurado. Para constructoras y desarrolladoras que operan con precisión.</p>
       <div class="hero-btns fa fa4">
-        <button class="btn-white">Solicitar demostración</button>
-        <button class="btn-outline-w">Ver terrenos disponibles</button>
+        <button class="btn-white" onclick="openAuth('register')">Solicitar demostración</button>
+        <button class="btn-outline-w" onclick="document.getElementById('terrenos').scrollIntoView({behavior:'smooth'})">Ver terrenos disponibles</button>
       </div>
       <div class="hero-trust fa fa4" style="margin-top:32px;">
         <span class="ht-txt">Código urbanístico CABA</span>
@@ -795,7 +803,7 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
           <div class="pf"><span class="pf-check">✓</span>Visualizador 3D del lote</div>
           <div class="pf"><span class="pf-check">✓</span>Sin tarjeta de crédito requerida</div>
         </div>
-        <button class="plan-btn plan-btn-out">Comenzar gratis</button>
+        <button class="plan-btn plan-btn-out" onclick="openAuth('register')">Comenzar gratis</button>
       </div>
 
       <div class="plan featured">
@@ -811,7 +819,7 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
           <div class="pf"><span class="pf-check">✓</span>Comparativa multi-lote</div>
           <div class="pf"><span class="pf-check">✓</span>Soporte técnico directo</div>
         </div>
-        <button class="plan-btn plan-btn-sol">Solicitar acceso</button>
+        <button class="plan-btn plan-btn-sol" onclick="openAuth('register')">Solicitar acceso</button>
       </div>
 
       <div class="plan">
@@ -826,7 +834,7 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
           <div class="pf"><span class="pf-check">✓</span>Informes a medida</div>
           <div class="pf"><span class="pf-check">✓</span>Gerente de cuenta dedicado</div>
         </div>
-        <button class="plan-btn plan-btn-out">Contactar al equipo</button>
+        <button class="plan-btn plan-btn-out" onclick="openAuth('register')">Contactar al equipo</button>
       </div>
 
     </div>
@@ -841,8 +849,8 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
     <h2 class="cta-title">Decisiones de desarrollo<br><em>respaldadas en datos.</em></h2>
     <p class="cta-desc">Las primeras 50 constructoras y desarrolladoras acceden sin costo durante los primeros 6 meses. Sin intermediarios ni compromisos.</p>
     <div class="cta-btns">
-      <button class="btn-white">Solicitar acceso anticipado</button>
-      <button class="btn-outline-w">Ver demostración</button>
+      <button class="btn-white" onclick="openAuth('register')">Solicitar acceso anticipado</button>
+      <button class="btn-outline-w" onclick="document.getElementById('escanear').scrollIntoView({behavior:'smooth'})">Ver demostración</button>
     </div>
   </div>
 </section>
@@ -872,9 +880,37 @@ footer{background:#fff;border-top:1px solid var(--border);padding:36px 48px;disp
 </div>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────────────────
-// Reemplazá esta URL con la URL de tu backend en Railway después del deploy.
+// ── CONFIG ───────────────────────────────────────────────────────────────────
 const API_BASE = 'https://plotr.onrender.com';
+
+// Render free tier duerme tras 15 min de inactividad.
+// Este ping lo despierta apenas carga la página para que el login no falle.
+(function wakeServer() {
+  var t = setTimeout(function() {
+    var b = document.getElementById('wakeup-banner');
+    if(b) b.style.display = 'block';
+  }, 3000);
+  fetch(API_BASE + '/health')
+    .then(function() {
+      clearTimeout(t);
+      var b = document.getElementById('wakeup-banner');
+      if(b) b.style.display = 'none';
+    })
+    .catch(function() {
+      clearTimeout(t);
+      var b = document.getElementById('wakeup-banner');
+      if(b) b.style.display = 'none';
+    });
+})();
+
+function apiTimeout(ms) {
+  return new Promise(function(_, reject) {
+    setTimeout(function(){ reject(new Error('timeout')); }, ms);
+  });
+}
+async function apiFetch(url, opts) {
+  return Promise.race([fetch(url, opts), apiTimeout(55000)]);
+}
 
 // ── AUTH TOKEN ────────────────────────────────────────────────────────────────
 function getToken() { return localStorage.getItem('plotr_token'); }
@@ -930,7 +966,7 @@ async function submitLogin() {
   btn.disabled = true; btn.textContent = 'Ingresando...';
   errEl.textContent = '';
   try {
-    var r = await fetch(API_BASE + '/auth/login', {
+    var r = await apiFetch(API_BASE + '/auth/login', {
       method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({email: email, password: pass})
     });
@@ -940,7 +976,7 @@ async function submitLogin() {
     updateNavAuth(); closeAuth();
     if(_authCallback) { _authCallback(); _authCallback = null; }
   } catch(e) {
-    errEl.textContent = 'No se pudo conectar con el servidor.';
+    errEl.textContent = 'El servidor está iniciando. Esperá 30 segundos e intentá de nuevo.';
   } finally {
     btn.disabled = false; btn.textContent = 'Ingresar';
   }
@@ -957,7 +993,7 @@ async function submitRegister() {
   btn.disabled = true; btn.textContent = 'Creando cuenta...';
   errEl.textContent = '';
   try {
-    var r = await fetch(API_BASE + '/auth/register', {
+    var r = await apiFetch(API_BASE + '/auth/register', {
       method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({nombre: nombre, email: email, password: pass})
     });
@@ -967,7 +1003,7 @@ async function submitRegister() {
     updateNavAuth(); closeAuth();
     if(_authCallback) { _authCallback(); _authCallback = null; }
   } catch(e) {
-    errEl.textContent = 'No se pudo conectar con el servidor.';
+    errEl.textContent = 'El servidor está iniciando. Esperá 30 segundos e intentá de nuevo.';
   } finally {
     btn.disabled = false; btn.textContent = 'Crear cuenta gratis';
   }
@@ -1006,7 +1042,7 @@ async function handleScanFiles(input) {
   for(var i = 0; i < input.files.length; i++) fd.append('archivos', input.files[i]);
 
   try {
-    var r = await fetch(API_BASE + '/scan/', {
+    var r = await apiFetch(API_BASE + '/scan/', {
       method: 'POST',
       headers: {'Authorization': 'Bearer ' + getToken()},
       body: fd
@@ -1195,7 +1231,7 @@ async function submitPublish() {
   for(var i=0;i<docFiles.length;i++) fd.append('documentos', docFiles[i]);
 
   try {
-    var r = await fetch(API_BASE + '/listings/', {
+    var r = await apiFetch(API_BASE + '/listings/', {
       method: 'POST',
       headers: {'Authorization': 'Bearer ' + getToken()},
       body: fd
@@ -1236,7 +1272,7 @@ async function runCapMatch() {
     if(m2Min > 0) body.superficie_min_m2 = m2Min;
     if(zona !== 'todas') body.barrios = [zona.replace('caba','CABA').replace('gba-norte','GBA Norte').replace('gba-sur','GBA Sur').replace('gba-oeste','GBA Oeste')];
 
-    var r = await fetch(API_BASE + '/capital-matcher/', {
+    var r = await apiFetch(API_BASE + '/capital-matcher/', {
       method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify(body)
     });
