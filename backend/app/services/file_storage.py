@@ -4,7 +4,7 @@ from pathlib import Path
 from fastapi import UploadFile
 from app.config import settings
 
-PHOTO_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
+PHOTO_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".tiff", ".tif", ".bmp"}
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".avi", ".webm", ".mkv", ".3gp"}
 DOC_EXTENSIONS = {".pdf"}
 
@@ -22,7 +22,7 @@ def get_file_type(filename: str) -> str:
 
 async def save_upload(file: UploadFile, subdir: str) -> tuple[str, int]:
     """Save an uploaded file; returns (relative_path, size_bytes)."""
-    ext = Path(file.filename).suffix.lower()
+    ext = Path(file.filename or "file").suffix.lower() or ".jpg"
     safe_name = f"{uuid.uuid4().hex}{ext}"
     dir_path = os.path.join(settings.upload_dir, subdir)
     Path(dir_path).mkdir(parents=True, exist_ok=True)

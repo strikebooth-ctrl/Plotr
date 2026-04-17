@@ -1099,7 +1099,13 @@ async function handleScanFiles(input) {
   document.getElementById('scanProgressPct').textContent = 'Subiendo...';
 
   var fd = new FormData();
-  for(var i = 0; i < input.files.length; i++) fd.append('archivos', input.files[i]);
+  for(var i = 0; i < input.files.length; i++) {
+    var f = input.files[i];
+    // iOS Safari omits filename for camera captures — provide fallback
+    var ext = (f.type || '').split('/')[1] || 'jpg';
+    var name = f.name || ('captura_' + i + '.' + ext);
+    fd.append('archivos', f, name);
+  }
 
   try {
     // uploads can be large — use a 5-minute timeout, not the default 90s
