@@ -1102,14 +1102,19 @@ async function handleScanFiles(input) {
   for(var i = 0; i < input.files.length; i++) fd.append('archivos', input.files[i]);
 
   try {
-    var r = await apiFetch(API_BASE + '/scan/', {
+    // uploads can be large — use a 5-minute timeout, not the default 90s
+    var controller = new AbortController();
+    var uploadTimer = setTimeout(function(){ controller.abort(); }, 300000);
+    var r = await fetch(API_BASE + '/scan/', {
       method: 'POST',
       headers: {'Authorization': 'Bearer ' + getToken()},
-      body: fd
+      body: fd,
+      signal: controller.signal
     });
+    clearTimeout(uploadTimer);
     if(!r.ok) {
-      var e = await r.json();
-      alert('Error al subir: ' + (e.detail || 'Error desconocido'));
+      var e; try { e = await r.json(); } catch(_) { e = {}; }
+      alert('Error al subir: ' + (e.detail || 'Error ' + r.status));
       resetScan(); return;
     }
     var scan = await r.json();
@@ -1118,7 +1123,7 @@ async function handleScanFiles(input) {
     document.getElementById('scanProgressPct').textContent = 'Analizando frames...';
     pollScan(scan.id);
   } catch(e) {
-    alert('No se pudo conectar con el servidor.');
+    alert('Error al subir: ' + (e.name === 'AbortError' ? 'El archivo es muy grande o la conexión es lenta.' : e.message));
     resetScan();
   }
 }
