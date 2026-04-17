@@ -20,18 +20,24 @@ import tempfile
 from pathlib import Path
 from typing import List, Optional
 
-import cv2
-import numpy as np
+try:
+    import cv2
+    import numpy as np
+    _CV2 = True
+except Exception:
+    _CV2 = False
 
 try:
     from scipy.spatial import ConvexHull
     _SCIPY = True
-except ImportError:
+except Exception:
     _SCIPY = False
 
 
 class TerrainAnalyzer:
     def __init__(self):
+        if not _CV2:
+            raise RuntimeError("OpenCV no disponible en este servidor")
         self.orb = cv2.ORB_create(nfeatures=2000)
         self.matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
 

@@ -957,81 +957,102 @@ function switchAuthTab(tab) {
   document.getElementById('tab-register').classList.toggle('active', tab === 'register');
 }
 
-// Polls /health every 5s until server is up, then calls retryFn
+// Polls /health every 5s (only 200 OK = ready) then calls retryFn once
+var _serverWaitActive = false;
 function _waitForServerThenRetry(errId, btnId, btnLabel, retryFn) {
+  if(_serverWaitActive) return;
+  _serverWaitActive = true;
   var errEl = document.getElementById(errId);
   var btn   = document.getElementById(btnId);
-  if(!btn) return;
+  if(!btn) { _serverWaitActive=false; return; }
   btn.disabled = true; btn.textContent = 'Esperando servidor...';
   var elapsed = 0;
-  if(errEl) errEl.innerHTML = '⏳ Servidor iniciando: <span id="' + errId + 'CD">0</span>s — esto solo pasa la primera vez';
-  var timer = setInterval(function() {
+  function tick() {
     elapsed += 5;
     var cd = document.getElementById(errId + 'CD');
     if(cd) cd.textContent = elapsed;
-    if(elapsed > 150) {
-      clearInterval(timer);
-      if(errEl) errEl.textContent = 'Tiempo agotado. Recargá la página e intentá de nuevo.';
+    if(elapsed > 180) {
+      _serverWaitActive = false;
+      if(errEl) errEl.innerHTML = 'El servidor no responde. <a href="#" onclick="location.reload();return false;">Recargá la página</a> e intentá de nuevo.';
       if(btn) { btn.disabled=false; btn.textContent=btnLabel; }
       return;
     }
-    fetch(API_BASE + '/health').then(function() {
-      // any HTTP response = server is alive
-      clearInterval(timer);
-      if(errEl) errEl.textContent = '';
-      retryFn();
-    }).catch(function(){});
-  }, 5000);
+    fetch(API_BASE + '/health')
+      .then(function(r) {
+        if(r.ok) {
+          _serverWaitActive = false;
+          if(errEl) errEl.textContent = '';
+          retryFn();
+        } else {
+          var el = document.getElementById(errId);
+          if(el) el.innerHTML = '⏳ Servidor iniciando: <span id="' + errId + 'CD">' + elapsed + '</span>s';
+          setTimeout(tick, 5000);
+        }
+      })
+      .catch(function() { setTimeout(tick, 5000); });
+  }
+  if(errEl) errEl.innerHTML = '⏳ Servidor iniciando: <span id="' + errId + 'CD">0</span>s';
+  setTimeout(tick, 5000);
+}
+
+async function _authRequest(url, body, errId, btnId, btnLabel, successFn, retryFn) {
+  var errEl = document.getElementById(errId);
+  var btn   = document.getElementById(btnId);
+  btn.disabled = true;
+  errEl.textContent = '';
+  var r, d;
+  try {
+    r = await apiFetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+  } catch(e) {
+    // network error or 90s timeout — server not reachable
+    btn.textContent = btnLabel;
+    _waitForServerThenRetry(errId, btnId, btnLabel, retryFn);
+    return;
+  }
+  try { d = await r.json(); } catch(e) { d = {}; }
+  if(!r.ok) {
+    if(r.status >= 500 || r.status === 403 || r.status === 502 || r.status === 503) {
+      btn.textContent = btnLabel;
+      _waitForServerThenRetry(errId, btnId, btnLabel, retryFn);
+    } else {
+      errEl.textContent = d.detail || 'Error. Verificá tus datos.';
+      btn.disabled=false; btn.textContent=btnLabel;
+    }
+    return;
+  }
+  successFn(d);
+  btn.disabled=false; btn.textContent=btnLabel;
 }
 
 async function submitLogin() {
   var email = document.getElementById('loginEmail').value.trim();
   var pass  = document.getElementById('loginPassword').value;
-  var errEl = document.getElementById('loginErr');
-  var btn   = document.getElementById('loginBtn');
-  if(!email || !pass) { errEl.textContent = 'Completá email y contraseña.'; return; }
-  btn.disabled = true; btn.textContent = 'Ingresando...';
-  errEl.textContent = '';
-  try {
-    var r = await apiFetch(API_BASE + '/auth/login', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({email: email, password: pass})
-    });
-    var d = await r.json();
-    if(!r.ok) { errEl.textContent = d.detail || 'Credenciales incorrectas.'; btn.disabled=false; btn.textContent='Ingresar'; return; }
-    setToken(d.access_token); setUser(d.user);
-    updateNavAuth(); closeAuth();
-    if(_authCallback) { _authCallback(); _authCallback = null; }
-    btn.disabled=false; btn.textContent='Ingresar';
-  } catch(e) {
-    _waitForServerThenRetry('loginErr', 'loginBtn', 'Ingresar', submitLogin);
-  }
+  if(!email || !pass) { document.getElementById('loginErr').textContent='Completá email y contraseña.'; return; }
+  document.getElementById('loginBtn').textContent = 'Ingresando...';
+  await _authRequest(
+    API_BASE + '/auth/login',
+    {email: email, password: pass},
+    'loginErr', 'loginBtn', 'Ingresar',
+    function(d) { setToken(d.access_token); setUser(d.user); updateNavAuth(); closeAuth(); if(_authCallback){_authCallback();_authCallback=null;} },
+    submitLogin
+  );
 }
 
 async function submitRegister() {
   var nombre = document.getElementById('regNombre').value.trim();
   var email  = document.getElementById('regEmail').value.trim();
   var pass   = document.getElementById('regPassword').value;
-  var errEl  = document.getElementById('regErr');
-  var btn    = document.getElementById('regBtn');
-  if(!nombre || !email || !pass) { errEl.textContent = 'Completá todos los campos.'; return; }
-  if(pass.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; return; }
-  btn.disabled = true; btn.textContent = 'Creando cuenta...';
-  errEl.textContent = '';
-  try {
-    var r = await apiFetch(API_BASE + '/auth/register', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({nombre: nombre, email: email, password: pass})
-    });
-    var d = await r.json();
-    if(!r.ok) { errEl.textContent = d.detail || 'Error al registrarse.'; btn.disabled=false; btn.textContent='Crear cuenta gratis'; return; }
-    setToken(d.access_token); setUser(d.user);
-    updateNavAuth(); closeAuth();
-    if(_authCallback) { _authCallback(); _authCallback = null; }
-    btn.disabled=false; btn.textContent='Crear cuenta gratis';
-  } catch(e) {
-    _waitForServerThenRetry('regErr', 'regBtn', 'Crear cuenta gratis', submitRegister);
-  }
+  if(!nombre||!email||!pass) { document.getElementById('regErr').textContent='Completá todos los campos.'; return; }
+  if(pass.length<6) { document.getElementById('regErr').textContent='La contraseña debe tener al menos 6 caracteres.'; return; }
+  document.getElementById('regBtn').textContent = 'Creando cuenta...';
+  await _authRequest(
+    API_BASE + '/auth/register',
+    {nombre: nombre, email: email, password: pass},
+    'regErr', 'regBtn', 'Crear cuenta gratis',
+    function(d) { setToken(d.access_token); setUser(d.user); updateNavAuth(); closeAuth(); if(_authCallback){_authCallback();_authCallback=null;} },
+    submitRegister
+  );
+}
 }
 
 // ── SCAN 3D ───────────────────────────────────────────────────────────────────
