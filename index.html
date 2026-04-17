@@ -971,14 +971,21 @@ async function submitLogin() {
       body: JSON.stringify({email: email, password: pass})
     });
     var d = await r.json();
-    if(!r.ok) { errEl.textContent = d.detail || 'Error al ingresar.'; return; }
+    if(!r.ok) { errEl.textContent = d.detail || 'Credenciales incorrectas.'; btn.disabled=false; btn.textContent='Ingresar'; return; }
     setToken(d.access_token); setUser(d.user);
     updateNavAuth(); closeAuth();
     if(_authCallback) { _authCallback(); _authCallback = null; }
+    btn.disabled=false; btn.textContent='Ingresar';
   } catch(e) {
-    errEl.textContent = 'El servidor está iniciando. Esperá 30 segundos e intentá de nuevo.';
-  } finally {
-    btn.disabled = false; btn.textContent = 'Ingresar';
+    var secs = 35;
+    errEl.innerHTML = '⏳ Servidor iniciando... reintentando en <span id="loginCD">35</span>s';
+    btn.textContent = 'Esperando...';
+    var iv = setInterval(function() {
+      secs--;
+      var el = document.getElementById('loginCD');
+      if(el) el.textContent = secs;
+      if(secs <= 0) { clearInterval(iv); submitLogin(); }
+    }, 1000);
   }
 }
 
@@ -998,14 +1005,21 @@ async function submitRegister() {
       body: JSON.stringify({nombre: nombre, email: email, password: pass})
     });
     var d = await r.json();
-    if(!r.ok) { errEl.textContent = d.detail || 'Error al registrarse.'; return; }
+    if(!r.ok) { errEl.textContent = d.detail || 'Error al registrarse.'; btn.disabled=false; btn.textContent='Crear cuenta gratis'; return; }
     setToken(d.access_token); setUser(d.user);
     updateNavAuth(); closeAuth();
     if(_authCallback) { _authCallback(); _authCallback = null; }
+    btn.disabled=false; btn.textContent='Crear cuenta gratis';
   } catch(e) {
-    errEl.textContent = 'El servidor está iniciando. Esperá 30 segundos e intentá de nuevo.';
-  } finally {
-    btn.disabled = false; btn.textContent = 'Crear cuenta gratis';
+    var secs = 35;
+    errEl.innerHTML = '⏳ Servidor iniciando... reintentando en <span id="regCD">35</span>s';
+    btn.textContent = 'Esperando...';
+    var iv = setInterval(function() {
+      secs--;
+      var el = document.getElementById('regCD');
+      if(el) el.textContent = secs;
+      if(secs <= 0) { clearInterval(iv); submitRegister(); }
+    }, 1000);
   }
 }
 
