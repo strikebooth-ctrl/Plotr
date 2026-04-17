@@ -975,12 +975,11 @@ function _waitForServerThenRetry(errId, btnId, btnLabel, retryFn) {
       if(btn) { btn.disabled=false; btn.textContent=btnLabel; }
       return;
     }
-    fetch(API_BASE + '/health').then(function(r) {
-      if(r.ok) {
-        clearInterval(timer);
-        if(errEl) errEl.textContent = '';
-        retryFn();
-      }
+    fetch(API_BASE + '/health').then(function() {
+      // any HTTP response = server is alive
+      clearInterval(timer);
+      if(errEl) errEl.textContent = '';
+      retryFn();
     }).catch(function(){});
   }, 5000);
 }
