@@ -1098,17 +1098,18 @@ async function handleScanFiles(input) {
   document.getElementById('scanQBar').style.width = '10%';
   document.getElementById('scanProgressPct').textContent = 'Subiendo...';
 
-  var fd = new FormData();
-  for(var i = 0; i < input.files.length; i++) {
-    var f = input.files[i];
-    // iOS Safari omits filename for camera captures — provide fallback
-    var ext = (f.type || '').split('/')[1] || 'jpg';
-    var name = f.name || ('captura_' + i + '.' + ext);
-    fd.append('archivos', f, name);
-  }
-
   try {
-    // uploads can be large — use a 5-minute timeout, not the default 90s
+    var fd = new FormData();
+    for(var i = 0; i < input.files.length; i++) {
+      var f = input.files[i];
+      var isVideo = (f.type || '').indexOf('video') !== -1;
+      var safeExt = isVideo ? 'mp4' : 'jpg';
+      var safeName = 'archivo_' + i + '.' + safeExt;
+      // Use Blob.slice to avoid iOS Safari "string did not match" bug with File objects
+      var blob = f.slice(0, f.size, isVideo ? 'video/mp4' : 'image/jpeg');
+      fd.append('archivos', blob, safeName);
+    }
+    // uploads can be large — use a 5-minute timeout
     var controller = new AbortController();
     var uploadTimer = setTimeout(function(){ controller.abort(); }, 300000);
     var r = await fetch(API_BASE + '/scan/', {
@@ -1120,7 +1121,9 @@ async function handleScanFiles(input) {
     clearTimeout(uploadTimer);
     if(!r.ok) {
       var e; try { e = await r.json(); } catch(_) { e = {}; }
-      alert('Error al subir: ' + (e.detail || 'Error ' + r.status));
+      var detail = e.detail;
+      if(Array.isArray(detail)) detail = detail.map(function(x){return x.msg||x;}).join(', ');
+      alert('Error al subir: ' + (detail || 'Error ' + r.status));
       resetScan(); return;
     }
     var scan = await r.json();
