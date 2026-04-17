@@ -1011,11 +1011,14 @@ async function _authRequest(url, body, errId, btnId, btnLabel, successFn, retryF
   }
   try { d = await r.json(); } catch(e) { d = {}; }
   if(!r.ok) {
-    if(r.status >= 500 || r.status === 403 || r.status === 502 || r.status === 503) {
+    if(r.status === 502 || r.status === 503 || r.status === 504) {
+      // gateway error — server not ready yet
       btn.textContent = btnLabel;
       _waitForServerThenRetry(errId, btnId, btnLabel, retryFn);
     } else {
-      errEl.textContent = d.detail || 'Error. Verificá tus datos.';
+      // show the real error (500 app crash, 400 validation, 401 auth, etc.)
+      var msg = d.detail || ('Error del servidor (' + r.status + '). Abrí F12 → Console y pasame el error.');
+      errEl.textContent = msg;
       btn.disabled=false; btn.textContent=btnLabel;
     }
     return;
@@ -1053,6 +1056,18 @@ async function submitRegister() {
     submitRegister
   );
 }
+}
+
+async function testServerConn() {
+  var el = document.getElementById('loginErr');
+  el.textContent = 'Probando...';
+  try {
+    var r = await fetch(API_BASE + '/health');
+    var txt = await r.text();
+    el.textContent = 'Servidor respondió: HTTP ' + r.status + ' → ' + txt.slice(0, 120);
+  } catch(e) {
+    el.textContent = 'Sin conexión: ' + e.message;
+  }
 }
 
 // ── SCAN 3D ───────────────────────────────────────────────────────────────────
@@ -2059,6 +2074,7 @@ updateNavAuth();
         </div>
         <div class="auth-err" id="loginErr"></div>
         <button class="auth-btn" id="loginBtn" onclick="submitLogin()">Ingresar</button>
+        <div style="text-align:center;margin-top:8px"><a href="#" style="font-size:11px;color:#888;text-decoration:none;" onclick="testServerConn();return false;">Probar conexión al servidor</a></div>
       </div>
       <div id="authRegisterForm" style="display:none;">
         <div class="auth-field">
